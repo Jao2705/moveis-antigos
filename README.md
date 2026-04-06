@@ -5,7 +5,7 @@ API RESTful desenvolvida com NestJS + TypeORM + SQLite para o tema:
 
 ## Integrantes
 - Joao Vitor Freitas Araujo
-- Alex
+- Alex Henrique Borges Alexandre
 
 ## Tecnologias
 - NestJS
