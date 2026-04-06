@@ -43,30 +43,24 @@ export class AtelieService {
         return atelie;
     }
 
-    async update(id: number, especialidadeEra?: string, equipadoCompleto?: boolean, areaOficinaM2?: number, dataFundacao?: Date | string): Promise<Atelie> {
-        const atelie = await this.atelieRepo.findById(id);
-        if (!atelie) {
+    async update(id: number, equipamento: boolean, area: number): Promise<Atelie> {
+        const Atelie = await this.atelieRepo.findById(id);
+        if (!Atelie) {
             throw new AtelieNotFoundException(id);
         }
 
-        const especialidadeAtualizada = especialidadeEra ?? atelie.especialidadeEra;
-        const equipadoAtualizado = equipadoCompleto ?? atelie.equipadoCompleto;
-        const areaAtualizada = areaOficinaM2 ?? atelie.areaOficinaM2;
-        const dataAtualizada = dataFundacao ?? atelie.dataFundacao!;
+        if (equipamento === null) {
+            throw new EquipadoExistsExcepiton();
+        }
 
-        this.validarAtelie(especialidadeAtualizada, equipadoAtualizado, areaAtualizada, dataAtualizada);
+        if (area === null || area < 50) {
+            throw new AreaExistsException();
+        }
 
-        atelie.especialidadeEra = especialidadeAtualizada.trim();
-        atelie.equipadoCompleto = equipadoAtualizado;
-        atelie.areaOficinaM2 = areaAtualizada;
+        Atelie.equipadoCompleto = equipamento;
+        Atelie.areaOficinaM2 = area;
 
-        return this.atelieRepo.update(new Atelie(
-            atelie.id,
-            atelie.especialidadeEra,
-            atelie.equipadoCompleto,
-            atelie.areaOficinaM2,
-            new Date(dataAtualizada)
-        ));
+        return this.atelieRepo.update(Atelie);
     }
 
     async delete(id: number): Promise<Atelie> {

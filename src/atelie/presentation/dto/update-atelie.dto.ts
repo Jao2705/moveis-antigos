@@ -14,13 +14,11 @@ export class UpdateAtelieDto {
     dataFundacao?: string;
 
     @ApiPropertyOptional({ example: true })
-    @IsOptional()
     @IsBoolean()
-    equipadoCompleto?: boolean;
+    equipadoCompleto: boolean;
 
     @ApiPropertyOptional({ example: 120 })
-    @IsOptional()
     @IsNumber()
     @Min(50)
-    areaOficinaM2?: number;
+    areaOficinaM2: number;
 }

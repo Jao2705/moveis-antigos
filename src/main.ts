@@ -2,13 +2,13 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { AllExceptionsFilter } from "./shared/filters/all-exceptions.filter";
+import { AppExceptionFilter } from "./shared/filters/all-exceptions.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AppExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle("moveisantigosv2")

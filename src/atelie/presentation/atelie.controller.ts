@@ -48,10 +48,8 @@ export class AtelieController {
     update(@Param("id") id: string, @Body() dto: UpdateAtelieDto) {
         return this.atelieService.update(
             Number(id),
-            dto.especialidadeEra,
             dto.equipadoCompleto,
-            dto.areaOficinaM2,
-            dto.dataFundacao
+            dto.areaOficinaM2
         );
     }
 
