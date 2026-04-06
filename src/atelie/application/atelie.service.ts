@@ -49,11 +49,15 @@ export class AtelieService {
             throw new AtelieNotFoundException(id);
         }
 
-        if (equipamento === null) {
+        if (typeof equipamento !== 'boolean') {
             throw new EquipadoExistsExcepiton();
         }
 
-        if (area === null || area < 50) {
+        if (typeof area !== 'number' || Number.isNaN(area)) {
+            throw new AreaExistsException();
+        }
+
+        if (area < 50) {
             throw new AreaExistsException();
         }
 
