@@ -1,0 +1,32 @@
+5.9. TEMA 9: Estúdio de Restauração de Móveis Antigos
+Entidade Pai: AtelieRestauracao
+id (number): Identificador único do ateliê.
+especialidadeEra (string): Era ou estilo de móveis em que o ateliê é especializado (ex: "Art Déco", "Barroco", "Luís XV").
+dataFundacao (date): Data de fundação do ateliê.
+equipadoCompleto (boolean): Indica se o ateliê possui equipamento completo para restauração (true) ou básico (false).
+areaOficinaM2 (number): Área da oficina em metros quadrados.
+
+
+Entidade Filho: ProjetoMovel (FK: atelieId)
+id (number): Identificador único do projeto de restauração.
+tipoMovel (string): Tipo e descrição do móvel a ser restaurado (ex: "Cômoda Luís XV", "Mesa de Jantar Vitoriana").
+dataInicioTrab (date): Data de início dos trabalhos de restauração.
+restaurado (boolean): Indica se o móvel foi completamente restaurado (true) ou ainda está em processo (false).
+horasHomem (number): Total de horas-homem dedicadas ao projeto.
+
+
+VALIDAÇÕES DE NEGÓCIO (mínimo 7 no service):
+
+[Obrigatório] Todos os campos de AtelieRestauracao e ProjetoMovel devem ser preenchidos. Lançar BadRequestException. OK
+
+[Consistência Temporal] A dataFundacao do ateliê não pode ser futura. A dataInicioTrab de um projeto não pode ser anterior à dataFundacao do ateliê. Lançar BadRequestException.
+
+[Integridade FK] Ao criar um ProjetoMovel, verificar se o atelieId referenciado existe. Lançar NotFoundException se não existir.
+
+[Regra Negócio] A areaOficinaM2 de um ateliê deve ser maior ou igual a 50 metros quadrados (espaço mínimo para restauração). Lançar BadRequestException se for menor que 50. OK
+
+[Regra Negócio] O horasHomem de um projeto deve estar entre 10 e 1000 horas (projetos viáveis). Lançar BadRequestException se estiver fora deste range.
+
+[Regra Negócio] Se restaurado for true, o horasHomem deve ser maior ou igual a 40. Se restaurado for false, o horasHomem pode ser qualquer valor dentro do range, mas não pode ser 0. Lançar BadRequestException se houver inconsistência.
+
+[Regra Negócio] Não permitir que um mesmo atelieId tenha dois ProjetoMovel com o mesmo tipoMovel e restaurado = false (evitar duplicidade de móveis em restauração). Lançar ConflictException.
