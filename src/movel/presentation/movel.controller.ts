@@ -40,11 +40,8 @@ export class MovelController {
     update(@Param("id") id: string, @Body() dto: UpdateMovelDto) {
         return this.movelService.update(
             Number(id),
-            dto.tipoMovel,
-            dto.dataInicioTrab,
             dto.restaurado,
             dto.horasHomem,
-            dto.atelieId
         );
     }
 

@@ -129,7 +129,7 @@ npm run start:dev
 ## Divisão de tarefas
 
 - João Vitor: Ficou responsável por fazer a parte de Ateliê.
-- Alex: Ficou responsável por fazer a parte de Móvel.
+- Alex: Ficou responsável por fazer a parte de Móvel e criar a relação 1:N entre as entidades.
 - Os testes foram realizados em conjunto. Os resultados foram tiveram resultados positivos de acordo com as regras de negócio solicitadas.
 
 API local:
