@@ -1,6 +1,5 @@
-import { BadRequestException } from "@nestjs/common";
-
-export class EquipadoExistsExcepiton extends BadRequestException {
+export class EquipadoExistsExcepiton extends Error {
+    getResponse: any;
     constructor() {
         super('Campo equipado inválido');
     }

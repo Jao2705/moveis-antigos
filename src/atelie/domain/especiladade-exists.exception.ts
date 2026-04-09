@@ -1,6 +1,5 @@
-import { BadRequestException } from "@nestjs/common";
-
-export class EspecialidadeExistsException extends BadRequestException {
+export class EspecialidadeExistsException extends Error {
+    getResponse: any;
     constructor() {
         super('Especialidade inválida ou excede o limite de caracteres');
     }

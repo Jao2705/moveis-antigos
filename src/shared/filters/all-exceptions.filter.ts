@@ -68,7 +68,7 @@ export class AppExceptionFilter implements ExceptionFilter {
 
     private handleEspecialidadeExistsException(exception: EspecialidadeExistsException): ErrorResponse {
         const msg =
-            typeof exception.getResponse === 'string' ? (exception.getResponse() as string) : exception.message;
+            typeof exception.getResponse === 'string' ? (exception.getResponse as string) : exception.message;
 
         return {
             status: HttpStatus.BAD_REQUEST,

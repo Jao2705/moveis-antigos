@@ -49,23 +49,17 @@ export class MovelService {
         return this.movelRepo.findAll();
     }
 
-    async update(id: number, tipoMovel?: string, dataInicioTrab?: Date | string, restaurado?: boolean, horasHomem?: number, atelieId?: number): Promise<Movel> {
-        const existente = await this.movelRepo.findById(id);
-        if (!existente) {
+    async update(id: number, restaurado: boolean, horasHomem: number): Promise<Movel> {
+        const movel = await this.movelRepo.findById(id);
+        if (!movel) {
             throw new MovelNotFoundException(id);
         }
 
-        const atualizado = new Movel(
-            id,
-            (tipoMovel ?? existente.tipoMovel)?.trim(),
-            dataInicioTrab ? new Date(dataInicioTrab) : existente.dataInicioTrab,
-            restaurado ?? existente.restaurado,
-            horasHomem ?? existente.horasHomem,
-            atelieId ?? existente.atelieId
-        );
+        movel.restaurado = restaurado;
+        movel.horasHomem = horasHomem;
 
-        await this.validarRegrasNegocio(atualizado, id);
-        return this.movelRepo.update(atualizado);
+        await this.validarRegrasNegocio(movel, id);
+        return this.movelRepo.update(movel);
     }
 
     async delete(id: number): Promise<Movel> {

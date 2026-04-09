@@ -1,6 +1,5 @@
-import { BadRequestException } from "@nestjs/common";
-
-export class AreaExistsException extends BadRequestException {
+export class AreaExistsException extends Error {
+    getResponse: any;
     constructor() {
         super('Área inválida');
     }
