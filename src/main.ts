@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AppExceptionFilter());
 
   const config = new DocumentBuilder()
-    .setTitle("moveisantigosv2")
+    .setTitle("Relicário System")
     .setDescription("API de gerenciamento de atelies e moveis")
     .setVersion("1.0")
     .addTag("atelie")
