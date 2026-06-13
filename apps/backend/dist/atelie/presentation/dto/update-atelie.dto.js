@@ -19,11 +19,11 @@ class UpdateAtelieDto {
 }
 exports.UpdateAtelieDto = UpdateAtelieDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "Luis XV" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'Luis XV' }),
     __metadata("design:type", String)
 ], UpdateAtelieDto.prototype, "especialidadeEra", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: "2000-04-20" }),
+    (0, swagger_1.ApiPropertyOptional)({ example: '2000-04-20' }),
     __metadata("design:type", String)
 ], UpdateAtelieDto.prototype, "dataFundacao", void 0);
 __decorate([

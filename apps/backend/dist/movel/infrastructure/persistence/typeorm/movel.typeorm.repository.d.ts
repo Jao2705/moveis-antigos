@@ -1,7 +1,7 @@
-import { Repository } from "typeorm";
+import { Repository } from 'typeorm';
 import type { MovelRepositoryPort } from "../../../application/ports/movel.repository.port";
 import { Movel } from "../../../domain/movel";
-import { MovelOrmEntity } from "./movel.orm-entity";
+import { MovelOrmEntity } from './movel.orm-entity';
 export declare class MovelTypeOrmRepository implements MovelRepositoryPort {
     private readonly repo;
     constructor(repo: Repository<MovelOrmEntity>);

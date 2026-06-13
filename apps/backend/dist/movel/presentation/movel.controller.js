@@ -42,7 +42,7 @@ let MovelController = class MovelController {
 exports.MovelController = MovelController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: "Cria um movel" }),
+    (0, swagger_1.ApiOperation)({ summary: 'Cria um movel' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_movel_dto_1.CreateMovelDto]),
@@ -50,42 +50,42 @@ __decorate([
 ], MovelController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: "Lista todos os moveis" }),
+    (0, swagger_1.ApiOperation)({ summary: 'Lista todos os moveis' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Busca movel por id" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Busca movel por id' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "findById", null);
 __decorate([
-    (0, common_1.Put)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Atualiza movel" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Put)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualiza movel' }),
+    __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_movel_dto_1.UpdateMovelDto]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Remove movel" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove movel' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "delete", null);
 exports.MovelController = MovelController = __decorate([
-    (0, swagger_1.ApiTags)("movel"),
-    (0, common_1.Controller)("movel"),
+    (0, swagger_1.ApiTags)('movel'),
+    (0, common_1.Controller)('movel'),
     __metadata("design:paramtypes", [movel_service_1.MovelService])
 ], MovelController);
 //# sourceMappingURL=movel.controller.js.map

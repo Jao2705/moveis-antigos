@@ -24,7 +24,7 @@ exports.MovelModule = MovelModule = __decorate([
         providers: [
             movel_service_1.MovelService,
             {
-                provide: "MovelRepositoryPort",
+                provide: 'MovelRepositoryPort',
                 useClass: movel_typeorm_repository_1.MovelTypeOrmRepository,
             },
         ],

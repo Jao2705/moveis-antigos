@@ -6,5 +6,5 @@ export class Movel {
     public restaurado: boolean,
     public horasHomem: number,
     public atelieId: number,
-  ) {}
+  ) { }
 }

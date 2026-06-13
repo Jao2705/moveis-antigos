@@ -34,13 +34,15 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     field: 'id',
                     code: 'ATELIE_NOT_FOUND',
-                    description: exception.message
-                }
-            ]
+                    description: exception.message,
+                },
+            ],
         };
     }
     handleEspecialidadeExistsException(exception) {
-        const msg = typeof exception.getResponse === 'string' ? exception.getResponse : exception.message;
+        const msg = typeof exception.getResponse === 'string'
+            ? exception.getResponse
+            : exception.message;
         return {
             status: common_1.HttpStatus.BAD_REQUEST,
             message: 'Especialidade inválida ou excede o limite de caracteres',
@@ -49,13 +51,14 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     field: 'especialidadeEra',
                     code: 'ESPECIALIDADE_EXISTS',
-                    description: msg
-                }
-            ]
+                    description: msg,
+                },
+            ],
         };
     }
     handleEquipadoExistsExcepiton(exception) {
-        const msg = typeof exception.getResponse === 'function' && typeof exception.getResponse() === 'string'
+        const msg = typeof exception.getResponse === 'function' &&
+            typeof exception.getResponse() === 'string'
             ? exception.getResponse()
             : exception.message;
         return {
@@ -66,13 +69,14 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     field: 'equipadoCompleto',
                     code: 'EQUIPADO_INVALIDO',
-                    description: msg
-                }
-            ]
+                    description: msg,
+                },
+            ],
         };
     }
     handleAreaExistsException(exception) {
-        const msg = typeof exception.getResponse === 'function' && typeof exception.getResponse() === 'string'
+        const msg = typeof exception.getResponse === 'function' &&
+            typeof exception.getResponse() === 'string'
             ? exception.getResponse()
             : exception.message;
         return {
@@ -83,13 +87,14 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     field: 'areaOficinaM2',
                     code: 'AREA_INVALIDA',
-                    description: msg
-                }
-            ]
+                    description: msg,
+                },
+            ],
         };
     }
     handleDataException(exception) {
-        const msg = typeof exception.getResponse === 'function' && typeof exception.getResponse() === 'string'
+        const msg = typeof exception.getResponse === 'function' &&
+            typeof exception.getResponse() === 'string'
             ? exception.getResponse()
             : exception.message;
         return {
@@ -100,9 +105,9 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     field: 'dataFundacao',
                     code: 'DATA_INVALIDA',
-                    description: msg
-                }
-            ]
+                    description: msg,
+                },
+            ],
         };
     }
     handleMovelNotFound(exception) {
@@ -115,8 +120,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'id',
                     code: 'MOVEL_NOT_FOUND',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelCampoObrigatorio(exception) {
@@ -128,8 +133,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     code: 'MOVEL_CAMPO_OBRIGATORIO',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelDataInicioInvalida(exception) {
@@ -142,8 +147,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'dataInicioTrab',
                     code: 'MOVEL_DATA_INICIO_INVALIDA',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelHorasHomemInvalida(exception) {
@@ -156,8 +161,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'horasHomem',
                     code: 'MOVEL_HORAS_HOMEM_INVALIDA',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelRestauradoInconsistente(exception) {
@@ -170,8 +175,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'restaurado',
                     code: 'MOVEL_RESTAURADO_INCONSISTENTE',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelEmProcessoHorasInvalida(exception) {
@@ -184,8 +189,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'horasHomem',
                     code: 'MOVEL_EM_PROCESSO_HORAS_INVALIDA',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleAtelieNaoEncontradoParaMovel(exception) {
@@ -198,8 +203,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'atelieId',
                     code: 'ATELIE_NAO_ENCONTRADO_PARA_MOVEL',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelDataAnteriorFundacao(exception) {
@@ -212,8 +217,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                     field: 'dataInicioTrab',
                     code: 'MOVEL_DATA_ANTERIOR_FUNDACAO',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleMovelDuplicadoEmRestauracao(exception) {
@@ -225,28 +230,34 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     code: 'MOVEL_DUPLICADO_EM_RESTAURACAO',
                     description: exception.message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleHttpException(exception) {
         const status = exception.getStatus();
         const response = exception.getResponse();
-        const message = typeof response === 'string' ? response : response.message || exception.message;
+        const message = typeof response === 'string'
+            ? response
+            : response.message || exception.message;
         return {
             status,
             message: Array.isArray(message) ? message[0] : message,
-            error: typeof response === 'string' ? 'HTTP_EXCEPTION' : response.error || 'HTTP_EXCEPTION',
+            error: typeof response === 'string'
+                ? 'HTTP_EXCEPTION'
+                : response.error || 'HTTP_EXCEPTION',
             details: [
                 {
                     code: 'HTTP_EXCEPTION',
                     description: Array.isArray(message) ? message.join(', ') : message,
-                }
-            ]
+                },
+            ],
         };
     }
     handleUnknown(exception) {
-        const msg = exception instanceof Error ? exception.message : 'Erro interno no servidor';
+        const msg = exception instanceof Error
+            ? exception.message
+            : 'Erro interno no servidor';
         return {
             status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
             message: 'Erro interno no servidor',
@@ -255,8 +266,8 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
                 {
                     code: 'INTERNAL_SERVER_ERROR',
                     description: msg,
-                }
-            ]
+                },
+            ],
         };
     }
     resolveException(exception) {

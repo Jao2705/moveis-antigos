@@ -45,7 +45,7 @@ let AtelieController = class AtelieController {
 exports.AtelieController = AtelieController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: "Cria um atelie" }),
+    (0, swagger_1.ApiOperation)({ summary: 'Cria um atelie' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_atelie_dto_1.CreateAtelieDto]),
@@ -53,51 +53,51 @@ __decorate([
 ], AtelieController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: "Lista de atelies" }),
+    (0, swagger_1.ApiOperation)({ summary: 'Lista de atelies' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AtelieController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(":id/com-moveis"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Busca um atelie com seus moveis" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Get)(':id/com-moveis'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Busca um atelie com seus moveis' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AtelieController.prototype, "findByIdComMoveis", null);
 __decorate([
-    (0, common_1.Get)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Busca um atelie por id" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Busca um atelie por id' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AtelieController.prototype, "findById", null);
 __decorate([
-    (0, common_1.Put)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Atualiza os dados de um atelie" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Put)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualiza os dados de um atelie' }),
+    __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_atelie_dto_1.UpdateAtelieDto]),
     __metadata("design:returntype", void 0)
 ], AtelieController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(":id"),
-    (0, swagger_1.ApiParam)({ name: "id", example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: "Remove um atelie" }),
-    __param(0, (0, common_1.Param)("id")),
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove um atelie' }),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AtelieController.prototype, "delete", null);
 exports.AtelieController = AtelieController = __decorate([
-    (0, swagger_1.ApiTags)("atelie"),
-    (0, common_1.Controller)("atelie"),
+    (0, swagger_1.ApiTags)('atelie'),
+    (0, common_1.Controller)('atelie'),
     __metadata("design:paramtypes", [atelie_service_1.AtelieService])
 ], AtelieController);
 //# sourceMappingURL=atelie.controller.js.map

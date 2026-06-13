@@ -56,17 +56,19 @@ let MovelService = class MovelService {
         return this.movelRepo.delete(id);
     }
     async validarRegrasNegocio(movel, ignoreId) {
-        if (!movel.tipoMovel || movel.tipoMovel === "") {
-            throw new movel_exceptions_1.MovelCampoObrigatorioException("tipoMovel");
+        if (!movel.tipoMovel || movel.tipoMovel === '') {
+            throw new movel_exceptions_1.MovelCampoObrigatorioException('tipoMovel');
         }
-        if (!(movel.dataInicioTrab instanceof Date) || Number.isNaN(movel.dataInicioTrab.getTime())) {
+        if (!(movel.dataInicioTrab instanceof Date) ||
+            Number.isNaN(movel.dataInicioTrab.getTime())) {
             throw new movel_exceptions_1.MovelDataInicioInvalidaException();
         }
-        if (typeof movel.restaurado !== "boolean") {
-            throw new movel_exceptions_1.MovelCampoObrigatorioException("restaurado");
+        if (typeof movel.restaurado !== 'boolean') {
+            throw new movel_exceptions_1.MovelCampoObrigatorioException('restaurado');
         }
-        if (typeof movel.horasHomem !== "number" || Number.isNaN(movel.horasHomem)) {
-            throw new movel_exceptions_1.MovelCampoObrigatorioException("horasHomem");
+        if (typeof movel.horasHomem !== 'number' ||
+            Number.isNaN(movel.horasHomem)) {
+            throw new movel_exceptions_1.MovelCampoObrigatorioException('horasHomem');
         }
         if (movel.horasHomem < 10 || movel.horasHomem > 1000) {
             throw new movel_exceptions_1.MovelHorasHomemInvalidaException();
@@ -74,11 +76,12 @@ let MovelService = class MovelService {
         if (movel.restaurado && movel.horasHomem < 40) {
             throw new movel_exceptions_1.MovelRestauradoInconsistenteException();
         }
-        if (!movel.restaurado && (movel.horasHomem < 10 || movel.horasHomem > 1000)) {
+        if (!movel.restaurado &&
+            (movel.horasHomem < 10 || movel.horasHomem > 1000)) {
             throw new movel_exceptions_1.MovelEmProcessoHorasInvalidaException();
         }
         if (!Number.isInteger(movel.atelieId) || movel.atelieId <= 0) {
-            throw new movel_exceptions_1.MovelCampoObrigatorioException("atelieId");
+            throw new movel_exceptions_1.MovelCampoObrigatorioException('atelieId');
         }
         const atelie = await this.atelieRepo.findById(movel.atelieId);
         if (!atelie) {
@@ -99,8 +102,8 @@ let MovelService = class MovelService {
 exports.MovelService = MovelService;
 exports.MovelService = MovelService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, common_1.Inject)("MovelRepositoryPort")),
-    __param(1, (0, common_1.Inject)("AtelieRepositoryPort")),
+    __param(0, (0, common_1.Inject)('MovelRepositoryPort')),
+    __param(1, (0, common_1.Inject)('AtelieRepositoryPort')),
     __metadata("design:paramtypes", [Object, Object])
 ], MovelService);
 //# sourceMappingURL=movel.service.js.map

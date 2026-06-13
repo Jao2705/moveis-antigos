@@ -1,6 +1,6 @@
-import { AtelieService } from "../application/atelie.service";
-import { CreateAtelieDto } from "./dto/create-atelie.dto";
-import { UpdateAtelieDto } from "./dto/update-atelie.dto";
+import { AtelieService } from '../application/atelie.service';
+import { CreateAtelieDto } from './dto/create-atelie.dto';
+import { UpdateAtelieDto } from './dto/update-atelie.dto';
 export declare class AtelieController {
     private readonly atelieService;
     constructor(atelieService: AtelieService);

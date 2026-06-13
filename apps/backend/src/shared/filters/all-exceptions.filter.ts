@@ -23,6 +23,17 @@ import {
   MovelNotFoundException,
   MovelRestauradoInconsistenteException,
 } from 'src/movel/domain/movel.exceptions';
+import {
+  UserNotFoundException,
+  EmailAlreadyExistsException,
+  InvalidUserRoleException,
+  LastAdminException,
+} from 'src/users/domain/user.exceptions';
+import {
+  OrdemServicoNotFoundException,
+  OrdemServicoCancelamentoNaoPermitidoException,
+  OrdemServicoAcessoNegadoException,
+} from 'src/ordem-servico/domain/ordem-servico.exceptions';
 
 export interface ErrorDetail {
   field?: string;
@@ -338,6 +349,42 @@ export class AppExceptionFilter implements ExceptionFilter {
     };
   }
 
+  private handleUserNotFound(exception: UserNotFoundException): ErrorResponse {
+    return {
+      status: HttpStatus.NOT_FOUND,
+      message: 'Usuário não encontrado.',
+      error: 'USER_NOT_FOUND',
+      details: [{ code: 'USER_NOT_FOUND', description: exception.message }],
+    };
+  }
+
+  private handleEmailAlreadyExists(exception: EmailAlreadyExistsException): ErrorResponse {
+    return {
+      status: HttpStatus.CONFLICT,
+      message: 'E-mail já cadastrado no sistema.',
+      error: 'EMAIL_ALREADY_EXISTS',
+      details: [{ field: 'email', code: 'EMAIL_ALREADY_EXISTS', description: exception.message }],
+    };
+  }
+
+  private handleInvalidUserRole(exception: InvalidUserRoleException): ErrorResponse {
+    return {
+      status: HttpStatus.BAD_REQUEST,
+      message: 'Perfil de usuário inválido.',
+      error: 'INVALID_USER_ROLE',
+      details: [{ field: 'role', code: 'INVALID_USER_ROLE', description: exception.message }],
+    };
+  }
+
+  private handleLastAdmin(exception: LastAdminException): ErrorResponse {
+    return {
+      status: HttpStatus.BAD_REQUEST,
+      message: 'Ação não permitida para o único administrador do sistema.',
+      error: 'LAST_ADMIN_OPERATION_FAILED',
+      details: [{ code: 'LAST_ADMIN_OPERATION_FAILED', description: exception.message }],
+    };
+  }
+
   private handleUnknown(exception: unknown): ErrorResponse {
     const msg =
       exception instanceof Error
@@ -412,6 +459,49 @@ export class AppExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof MovelDuplicadoEmRestauracaoException) {
       return this.handleMovelDuplicadoEmRestauracao(exception);
+    }
+
+    if (exception instanceof UserNotFoundException) {
+      return this.handleUserNotFound(exception);
+    }
+
+    if (exception instanceof EmailAlreadyExistsException) {
+      return this.handleEmailAlreadyExists(exception);
+    }
+
+    if (exception instanceof InvalidUserRoleException) {
+      return this.handleInvalidUserRole(exception);
+    }
+
+    if (exception instanceof LastAdminException) {
+      return this.handleLastAdmin(exception);
+    }
+
+    if (exception instanceof OrdemServicoNotFoundException) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Ordem de serviço não encontrada.',
+        error: 'ORDEM_SERVICO_NOT_FOUND',
+        details: [{ code: 'ORDEM_SERVICO_NOT_FOUND', description: exception.message }],
+      };
+    }
+
+    if (exception instanceof OrdemServicoCancelamentoNaoPermitidoException) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Cancelamento não permitido para esta ordem.',
+        error: 'ORDEM_CANCELAMENTO_NAO_PERMITIDO',
+        details: [{ code: 'ORDEM_CANCELAMENTO_NAO_PERMITIDO', description: exception.message }],
+      };
+    }
+
+    if (exception instanceof OrdemServicoAcessoNegadoException) {
+      return {
+        status: HttpStatus.FORBIDDEN,
+        message: 'Acesso negado a esta ordem de serviço.',
+        error: 'ORDEM_ACESSO_NEGADO',
+        details: [{ code: 'ORDEM_ACESSO_NEGADO', description: exception.message }],
+      };
     }
 
     if (exception instanceof HttpException) {

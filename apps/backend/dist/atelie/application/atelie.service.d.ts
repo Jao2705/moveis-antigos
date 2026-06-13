@@ -1,6 +1,6 @@
-import { Atelie } from "../domain/atelie";
-import type { AtelieRepositoryPort } from "./ports/atelie.repository.port";
-import { AtelieComMoveis } from "../domain/atelie-com-moveis";
+import { Atelie } from '../domain/atelie';
+import type { AtelieRepositoryPort } from './ports/atelie.repository.port';
+import { AtelieComMoveis } from '../domain/atelie-com-moveis';
 export declare class AtelieService {
     private readonly atelieRepo;
     constructor(atelieRepo: AtelieRepositoryPort);

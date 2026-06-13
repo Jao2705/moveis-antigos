@@ -20,11 +20,11 @@ class CreateMovelDto {
 }
 exports.CreateMovelDto = CreateMovelDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "Comoda Luis XV" }),
+    (0, swagger_1.ApiProperty)({ example: 'Comoda Luis XV' }),
     __metadata("design:type", String)
 ], CreateMovelDto.prototype, "tipoMovel", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "2021-08-15" }),
+    (0, swagger_1.ApiProperty)({ example: '2021-08-15' }),
     __metadata("design:type", String)
 ], CreateMovelDto.prototype, "dataInicioTrab", void 0);
 __decorate([

@@ -1,4 +1,4 @@
-import { Movel } from "../../domain/movel";
+import { Movel } from '../../domain/movel';
 export interface MovelRepositoryPort {
     create(movel: Movel): Promise<Movel>;
     findById(id: number): Promise<Movel | null>;

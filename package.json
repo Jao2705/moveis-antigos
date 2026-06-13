@@ -15,5 +15,13 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sqlite3"
+    ]
   }
 }

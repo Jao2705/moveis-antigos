@@ -1,6 +1,6 @@
-import { MovelService } from "../application/movel.service";
-import { CreateMovelDto } from "./dto/create-movel.dto";
-import { UpdateMovelDto } from "./dto/update-movel.dto";
+import { MovelService } from '../application/movel.service';
+import { CreateMovelDto } from './dto/create-movel.dto';
+import { UpdateMovelDto } from './dto/update-movel.dto';
 export declare class MovelController {
     private readonly movelService;
     constructor(movelService: MovelService);

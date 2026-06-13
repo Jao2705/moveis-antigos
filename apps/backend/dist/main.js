@@ -10,15 +10,15 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true }));
     app.useGlobalFilters(new all_exceptions_filter_1.AppExceptionFilter());
     const config = new swagger_1.DocumentBuilder()
-        .setTitle("Relicário System")
-        .setDescription("API de gerenciamento de atelies e moveis")
-        .setVersion("1.0")
-        .addTag("atelie")
-        .addTag("movel")
+        .setTitle('Relicário System')
+        .setDescription('API de gerenciamento de atelies e moveis')
+        .setVersion('1.0')
+        .addTag('atelie')
+        .addTag('movel')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup("swagger-ui", app, document, {
-        jsonDocumentUrl: "swagger/json",
+    swagger_1.SwaggerModule.setup('swagger-ui', app, document, {
+        jsonDocumentUrl: 'swagger/json',
     });
     await app.listen(process.env.PORT ?? 3000);
 }

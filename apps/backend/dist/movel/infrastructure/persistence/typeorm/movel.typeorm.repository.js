@@ -39,16 +39,16 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
         return movel ? this.toDomain(movel) : null;
     }
     async findAll() {
-        const moveis = await this.repo.find({ order: { id: "ASC" } });
+        const moveis = await this.repo.find({ order: { id: 'ASC' } });
         return moveis.map(this.toDomain);
     }
     async update(movel) {
         if (movel.id === null) {
-            throw new Error("Movel sem ID nao pode ser atualizado");
+            throw new Error('Movel sem ID nao pode ser atualizado');
         }
         const orm = await this.repo.findOneBy({ id: movel.id });
         if (!orm) {
-            throw new Error("Movel nao encontrado para atualizar");
+            throw new Error('Movel nao encontrado para atualizar');
         }
         orm.tipoMovel = movel.tipoMovel;
         orm.dataInicioTrab = movel.dataInicioTrab;
@@ -61,7 +61,7 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
     async delete(id) {
         const orm = await this.repo.findOneBy({ id });
         if (!orm) {
-            throw new Error("Movel nao encontrado para remover");
+            throw new Error('Movel nao encontrado para remover');
         }
         const removido = this.toDomain(orm);
         await this.repo.delete({ id });
@@ -69,12 +69,14 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
     }
     async existsOpenByAtelieAndTipo(atelieId, tipoMovel, ignoreId) {
         const query = this.repo
-            .createQueryBuilder("movel")
-            .where("movel.atelieId = :atelieId", { atelieId })
-            .andWhere("LOWER(movel.tipoMovel) = LOWER(:tipoMovel)", { tipoMovel: tipoMovel.trim() })
-            .andWhere("movel.restaurado = :restaurado", { restaurado: false });
+            .createQueryBuilder('movel')
+            .where('movel.atelieId = :atelieId', { atelieId })
+            .andWhere('LOWER(movel.tipoMovel) = LOWER(:tipoMovel)', {
+            tipoMovel: tipoMovel.trim(),
+        })
+            .andWhere('movel.restaurado = :restaurado', { restaurado: false });
         if (ignoreId) {
-            query.andWhere("movel.id != :ignoreId", { ignoreId });
+            query.andWhere('movel.id != :ignoreId', { ignoreId });
         }
         const total = await query.getCount();
         return total > 0;

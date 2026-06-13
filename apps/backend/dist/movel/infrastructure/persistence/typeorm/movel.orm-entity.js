@@ -47,11 +47,13 @@ __decorate([
     __metadata("design:type", Number)
 ], MovelOrmEntity.prototype, "atelieId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => atelie_orm_entity_1.AtelieOrmEntity, (atelie) => atelie.moveis, { onDelete: "CASCADE" }),
-    (0, typeorm_1.JoinColumn)({ name: "atelieId" }),
+    (0, typeorm_1.ManyToOne)(() => atelie_orm_entity_1.AtelieOrmEntity, (atelie) => atelie.moveis, {
+        onDelete: 'CASCADE',
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'atelieId' }),
     __metadata("design:type", atelie_orm_entity_1.AtelieOrmEntity)
 ], MovelOrmEntity.prototype, "atelie", void 0);
 exports.MovelOrmEntity = MovelOrmEntity = __decorate([
-    (0, typeorm_1.Entity)("movel")
+    (0, typeorm_1.Entity)('movel')
 ], MovelOrmEntity);
 //# sourceMappingURL=movel.orm-entity.js.map

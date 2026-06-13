@@ -38,14 +38,14 @@ let AtelieTypeOrmRepository = class AtelieTypeOrmRepository {
         return atelie ? this.toDomain(atelie) : null;
     }
     async findAll() {
-        const atelies = await this.repo.find({ order: { id: "ASC" } });
+        const atelies = await this.repo.find({ order: { id: 'ASC' } });
         return atelies.map(this.toDomain);
     }
     async findByIdWithMoveis(id) {
         const atelie = await this.repo.findOne({
             where: { id },
-            relations: ["moveis"],
-            order: { moveis: { id: "ASC" } },
+            relations: ['moveis'],
+            order: { moveis: { id: 'ASC' } },
         });
         if (!atelie) {
             return null;
@@ -68,11 +68,11 @@ let AtelieTypeOrmRepository = class AtelieTypeOrmRepository {
     }
     async update(atelie) {
         if (atelie.id === null) {
-            throw new Error("Atelie sem ID nao pode ser atualizado");
+            throw new Error('Atelie sem ID nao pode ser atualizado');
         }
         const orm = await this.repo.findOneBy({ id: atelie.id });
         if (!orm) {
-            throw new Error("Atelie nao encontrado para atualizar");
+            throw new Error('Atelie nao encontrado para atualizar');
         }
         orm.especialidadeEra = atelie.especialidadeEra;
         orm.equipadoCompleto = atelie.equipadoCompleto;
@@ -84,7 +84,7 @@ let AtelieTypeOrmRepository = class AtelieTypeOrmRepository {
     async delete(id) {
         const orm = await this.repo.findOneBy({ id });
         if (!orm) {
-            throw new Error("Atelie nao encontrado para remover");
+            throw new Error('Atelie nao encontrado para remover');
         }
         const removido = this.toDomain(orm);
         await this.repo.delete({ id });

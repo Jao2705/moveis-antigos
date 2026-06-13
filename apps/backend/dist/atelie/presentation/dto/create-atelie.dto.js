@@ -20,13 +20,13 @@ class CreateAtelieDto {
 }
 exports.CreateAtelieDto = CreateAtelieDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "Barroco" }),
+    (0, swagger_1.ApiProperty)({ example: 'Barroco' }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CreateAtelieDto.prototype, "especialidadeEra", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "2000-04-20" }),
+    (0, swagger_1.ApiProperty)({ example: '2000-04-20' }),
     __metadata("design:type", String)
 ], CreateAtelieDto.prototype, "dataFundacao", void 0);
 __decorate([

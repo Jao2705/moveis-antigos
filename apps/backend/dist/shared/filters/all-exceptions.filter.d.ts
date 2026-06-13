@@ -1,4 +1,4 @@
-import { ArgumentsHost, ExceptionFilter } from "@nestjs/common";
+import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 export interface ErrorDetail {
     field?: string;
     code: string;
