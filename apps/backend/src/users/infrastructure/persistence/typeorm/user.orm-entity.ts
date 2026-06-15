@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('user')
 export class UserOrmEntity {
@@ -14,8 +20,11 @@ export class UserOrmEntity {
   @Column()
   senha_hash: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', default: 'user' })
   role: 'admin' | 'user';
+
+  @Column({ default: false })
+  ativo: boolean;
 
   @CreateDateColumn()
   created_at: Date;

@@ -146,7 +146,7 @@ importers:
         specifier: ^8.20.0
         version: 8.61.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
 
-  apps/dashboard:
+  apps/frontend:
     dependencies:
       '@angular/common':
         specifier: ^20.3.0
@@ -218,6 +218,12 @@ importers:
       typescript:
         specifier: ~5.9.2
         version: 5.9.3
+
+  packages/eslint-config: {}
+
+  packages/typescript-config: {}
+
+  packages/utils: {}
 
 packages:
 
@@ -9623,11 +9629,11 @@ snapshots:
 
   istanbul-lib-instrument@6.0.3:
     dependencies:
-      '@babel/core': 7.28.3
+      '@babel/core': 7.29.7
       '@babel/parser': 7.29.7
       '@istanbuljs/schema': 0.1.6
       istanbul-lib-coverage: 3.2.2
-      semver: 7.7.2
+      semver: 7.8.4
     transitivePeerDependencies:
       - supports-color
 
@@ -10597,7 +10603,7 @@ snapshots:
     dependencies:
       hosted-git-info: 9.0.3
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.8.4
       validate-npm-package-name: 6.0.2
 
   npm-packlist@10.0.4:

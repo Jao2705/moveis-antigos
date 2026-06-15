@@ -18,6 +18,9 @@ const swagger_1 = require("@nestjs/swagger");
 const movel_service_1 = require("../application/movel.service");
 const create_movel_dto_1 = require("./dto/create-movel.dto");
 const update_movel_dto_1 = require("./dto/update-movel.dto");
+const jwt_auth_guard_1 = require("../../auth/infrastructure/guards/jwt-auth.guard");
+const roles_guard_1 = require("../../auth/infrastructure/guards/roles.guard");
+const roles_decorator_1 = require("../../auth/infrastructure/decorators/roles.decorator");
 let MovelController = class MovelController {
     movelService;
     constructor(movelService) {
@@ -42,7 +45,8 @@ let MovelController = class MovelController {
 exports.MovelController = MovelController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Cria um movel' }),
+    (0, roles_decorator_1.Roles)('admin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Cria um movel (Admin)' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_movel_dto_1.CreateMovelDto]),
@@ -50,6 +54,7 @@ __decorate([
 ], MovelController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiOperation)({ summary: 'Lista todos os moveis' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -57,6 +62,7 @@ __decorate([
 ], MovelController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
     (0, swagger_1.ApiOperation)({ summary: 'Busca movel por id' }),
     __param(0, (0, common_1.Param)('id')),
@@ -66,8 +72,9 @@ __decorate([
 ], MovelController.prototype, "findById", null);
 __decorate([
     (0, common_1.Put)(':id'),
+    (0, roles_decorator_1.Roles)('admin'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualiza movel' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualiza movel (Admin)' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -76,8 +83,9 @@ __decorate([
 ], MovelController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)('admin'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Remove movel' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove movel (Admin)' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -85,6 +93,8 @@ __decorate([
 ], MovelController.prototype, "delete", null);
 exports.MovelController = MovelController = __decorate([
     (0, swagger_1.ApiTags)('movel'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, common_1.Controller)('movel'),
     __metadata("design:paramtypes", [movel_service_1.MovelService])
 ], MovelController);
