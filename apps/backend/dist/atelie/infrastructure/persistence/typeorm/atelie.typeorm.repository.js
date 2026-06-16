@@ -63,6 +63,7 @@ let AtelieTypeOrmRepository = class AtelieTypeOrmRepository {
                 restaurado: movel.restaurado,
                 horasHomem: movel.horasHomem,
                 atelieId: movel.atelieId,
+                ownerUserId: movel.ownerUserId,
             })),
         };
     }

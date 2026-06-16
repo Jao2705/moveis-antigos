@@ -35,6 +35,7 @@ export const routes: Routes = [
       },
       {
         path: 'atelie/novo',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/atelie/atelie-form.component').then(
             (m) => m.AtelieFormComponent,
@@ -42,31 +43,39 @@ export const routes: Routes = [
       },
       {
         path: 'atelie/editar/:id',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/atelie/atelie-form.component').then(
             (m) => m.AtelieFormComponent,
           ),
       },
       {
-        path: 'movel',
+        path: 'atelie/:id',
         loadComponent: () =>
           import('./features/movel/movel-list.component').then(
             (m) => m.MovelListComponent,
           ),
       },
       {
-        path: 'movel/novo',
+        path: 'atelie/:atelieId/moveis/novo',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/movel/movel-form.component').then(
             (m) => m.MovelFormComponent,
           ),
       },
       {
-        path: 'movel/editar/:id',
+        path: 'atelie/:atelieId/moveis/editar/:id',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/movel/movel-form.component').then(
             (m) => m.MovelFormComponent,
           ),
+      },
+      {
+        path: 'movel',
+        redirectTo: 'atelie',
+        pathMatch: 'full',
       },
       {
         path: 'admin/users',

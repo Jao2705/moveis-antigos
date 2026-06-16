@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Atelie } from './models';
+import { Atelie, AtelieComMoveis } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class AtelieApiService {
@@ -13,6 +13,10 @@ export class AtelieApiService {
 
   getById(id: number) {
     return this.http.get<Atelie>(`${environment.apiUrl}/atelie/${id}`);
+  }
+
+  getByIdWithMoveis(id: number) {
+    return this.http.get<AtelieComMoveis>(`${environment.apiUrl}/atelie/${id}/com-moveis`);
   }
 
   create(payload: Omit<Atelie, 'id'>) {

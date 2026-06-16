@@ -9,11 +9,11 @@ export declare class JwtStrategy extends JwtStrategy_base {
         email: string;
         nome: string;
         role: 'admin' | 'user';
-    }): Promise<{
+    }): {
         id: number;
         email: string;
         nome: string;
         role: "user" | "admin";
-    }>;
+    };
 }
 export {};

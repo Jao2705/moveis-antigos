@@ -85,7 +85,9 @@ __decorate([
 __decorate([
     (0, common_1.Patch)('users/:id/activate'),
     (0, roles_decorator_1.Roles)('admin'),
-    (0, swagger_1.ApiOperation)({ summary: 'Ativa ou desativa um usuário (apenas administrador)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Ativa ou desativa um usuário (apenas administrador)',
+    }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

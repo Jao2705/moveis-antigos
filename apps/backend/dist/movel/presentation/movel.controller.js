@@ -26,8 +26,8 @@ let MovelController = class MovelController {
     constructor(movelService) {
         this.movelService = movelService;
     }
-    create(dto) {
-        return this.movelService.create(dto.tipoMovel, dto.dataInicioTrab, dto.restaurado, dto.horasHomem, dto.atelieId);
+    create(dto, req) {
+        return this.movelService.create(dto.tipoMovel, dto.dataInicioTrab, dto.restaurado, dto.horasHomem, dto.atelieId, req.user.id);
     }
     findAll() {
         return this.movelService.findAll();
@@ -35,21 +35,22 @@ let MovelController = class MovelController {
     findById(id) {
         return this.movelService.findById(Number(id));
     }
-    update(id, dto) {
-        return this.movelService.update(Number(id), dto.restaurado, dto.horasHomem);
+    update(id, dto, req) {
+        return this.movelService.update(Number(id), dto.restaurado, dto.horasHomem, req.user);
     }
-    delete(id) {
-        return this.movelService.delete(Number(id));
+    delete(id, req) {
+        return this.movelService.delete(Number(id), req.user);
     }
 };
 exports.MovelController = MovelController;
 __decorate([
     (0, common_1.Post)(),
-    (0, roles_decorator_1.Roles)('admin'),
-    (0, swagger_1.ApiOperation)({ summary: 'Cria um movel (Admin)' }),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
+    (0, swagger_1.ApiOperation)({ summary: 'Cria um movel (Admin ou usuário)' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_movel_dto_1.CreateMovelDto]),
+    __metadata("design:paramtypes", [create_movel_dto_1.CreateMovelDto, Object]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "create", null);
 __decorate([
@@ -72,23 +73,25 @@ __decorate([
 ], MovelController.prototype, "findById", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    (0, roles_decorator_1.Roles)('admin'),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualiza movel (Admin)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualiza movel (Admin ou proprietário)' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_movel_dto_1.UpdateMovelDto]),
+    __metadata("design:paramtypes", [String, update_movel_dto_1.UpdateMovelDto, Object]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, roles_decorator_1.Roles)('admin'),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Remove movel (Admin)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove movel (Admin ou proprietário)' }),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], MovelController.prototype, "delete", null);
 exports.MovelController = MovelController = __decorate([

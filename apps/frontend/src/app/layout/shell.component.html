@@ -1,0 +1,36 @@
+<div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(217,119,6,0.14),_transparent_38%),linear-gradient(180deg,_#fffaf2_0%,_#f8f3ea_100%)] text-stone-900">
+  <header class="border-b border-amber-200/70 bg-white/75 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <a routerLink="/dashboard" class="group flex items-center gap-3">
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-700 text-lg font-black text-white shadow-lg shadow-amber-900/20">
+          MA
+        </span>
+        <div>
+          <p class="text-xs uppercase tracking-[0.35em] text-amber-800/70">Moveis Antigos</p>
+          <p class="text-sm font-semibold text-stone-900">Painel de oficina</p>
+        </div>
+      </a>
+
+      <nav class="flex flex-wrap items-center justify-end gap-2 text-sm">
+        <a routerLink="/dashboard" routerLinkActive="bg-amber-700 text-white shadow-lg shadow-amber-900/15" class="rounded-full px-4 py-2 text-stone-700 transition hover:bg-amber-100">
+          Dashboard
+        </a>
+        <a routerLink="/atelie" routerLinkActive="bg-amber-700 text-white shadow-lg shadow-amber-900/15" class="rounded-full px-4 py-2 text-stone-700 transition hover:bg-amber-100">
+          Ateliês
+        </a>
+        @if (auth.isAdmin()) {
+          <a routerLink="/admin/users" routerLinkActive="bg-amber-700 text-white shadow-lg shadow-amber-900/15" class="rounded-full px-4 py-2 text-stone-700 transition hover:bg-amber-100">
+            Usuários
+          </a>
+        }
+        <button type="button" ui-button variant="ghost" class="ml-2" (click)="auth.logout()">
+          Sair
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <router-outlet />
+  </main>
+</div>

@@ -59,7 +59,9 @@ export class UsersController {
 
   @Patch('users/:id/activate')
   @Roles('admin')
-  @ApiOperation({ summary: 'Ativa ou desativa um usuário (apenas administrador)' })
+  @ApiOperation({
+    summary: 'Ativa ou desativa um usuário (apenas administrador)',
+  })
   async activate(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: ActivateUserDto,

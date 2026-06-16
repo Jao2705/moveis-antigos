@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateMovelDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class UpdateMovelDto {
     restaurado;
     horasHomem;
@@ -18,10 +19,13 @@ class UpdateMovelDto {
 exports.UpdateMovelDto = UpdateMovelDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: true }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], UpdateMovelDto.prototype, "restaurado", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 200 }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
 ], UpdateMovelDto.prototype, "horasHomem", void 0);
 //# sourceMappingURL=update-movel.dto.js.map

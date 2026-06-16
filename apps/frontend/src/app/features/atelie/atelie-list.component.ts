@@ -5,81 +5,13 @@ import { AtelieApiService } from '../../core/atelie-api.service';
 import { Atelie } from '../../core/models';
 import { extractApiError } from '../../core/api-error.util';
 import { AuthService } from '../../core/auth.service';
+import { UiButtonComponent } from '../../shared/ui/ui-button.component';
+import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
 @Component({
   selector: 'app-atelie-list',
-  imports: [RouterLink, DatePipe],
-  template: `
-    <section>
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold">Ateliês</h2>
-        @if (auth.isAdmin()) {
-          <a routerLink="/atelie/novo" class="rounded-md bg-amber-800 px-4 py-2 text-sm text-white">Novo ateliê</a>
-        }
-      </div>
-
-      @if (loading()) {
-        <p class="text-stone-600">Carregando ateliês...</p>
-      } @else if (errorMessage()) {
-        <div class="rounded-md bg-red-50 p-3 text-sm text-red-700">{{ errorMessage() }}</div>
-      } @else if (items().length === 0) {
-        <div class="rounded-md border border-dashed border-stone-300 p-6 text-stone-600">
-          Nenhum ateliê cadastrado.
-        </div>
-      } @else {
-        @if (actionMessage()) {
-          <div class="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">{{ actionMessage() }}</div>
-        }
-        <div class="overflow-x-auto rounded-xl border border-stone-200 bg-white">
-          <table class="min-w-full text-sm">
-            <thead class="bg-stone-100 text-left">
-              <tr>
-                <th class="px-4 py-3">Especialidade</th>
-                <th class="px-4 py-3">Fundação</th>
-                <th class="px-4 py-3">Área (m²)</th>
-                <th class="px-4 py-3">Equipado</th>
-                @if (auth.isAdmin()) {
-                  <th class="px-4 py-3">Ações</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              @for (item of items(); track item.id) {
-                <tr class="border-t border-stone-100">
-                  <td class="px-4 py-3">{{ item.especialidadeEra }}</td>
-                  <td class="px-4 py-3">{{ item.dataFundacao | date: 'dd/MM/yyyy' }}</td>
-                  <td class="px-4 py-3">{{ item.areaOficinaM2 }}</td>
-                  <td class="px-4 py-3">{{ item.equipadoCompleto ? 'Sim' : 'Não' }}</td>
-                  @if (auth.isAdmin()) {
-                    <td class="px-4 py-3 space-x-2">
-                      <a [routerLink]="['/atelie/editar', item.id]" class="text-amber-800 hover:underline">Editar</a>
-                      <button type="button" class="text-red-700 hover:underline" (click)="confirmDelete(item)">Excluir</button>
-                    </td>
-                  }
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-
-      @if (deleteTarget()) {
-        <div class="fixed inset-0 flex items-center justify-center bg-black/40 p-4">
-          <div class="w-full max-w-md rounded-xl bg-white p-6">
-            <h3 class="text-lg font-semibold">Confirmar exclusão</h3>
-            <p class="mt-2 text-sm text-stone-600">Deseja excluir o ateliê "{{ deleteTarget()?.especialidadeEra }}"?</p>
-            @if (deleteError()) {
-              <p class="mt-2 text-sm text-red-600">{{ deleteError() }}</p>
-            }
-            <div class="mt-4 flex justify-end gap-2">
-              <button type="button" class="rounded-md border px-3 py-2" (click)="deleteTarget.set(null)">Cancelar</button>
-              <button type="button" class="rounded-md bg-red-700 px-3 py-2 text-white" (click)="deleteConfirmed()">Excluir</button>
-            </div>
-          </div>
-        </div>
-      }
-    </section>
-  `,
+  imports: [RouterLink, DatePipe, UiButtonComponent, UiCardComponent],
+  templateUrl: './atelie-list.component.html',
 })
 export class AtelieListComponent implements OnInit {
   private readonly api = inject(AtelieApiService);

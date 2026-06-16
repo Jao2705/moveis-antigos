@@ -33,6 +33,7 @@ export interface Movel {
   restaurado: boolean;
   horasHomem: number;
   atelieId: number;
+  ownerUserId?: number | null;
 }
 
 export interface AppUser {

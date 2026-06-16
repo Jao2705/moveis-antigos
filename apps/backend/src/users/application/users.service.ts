@@ -15,7 +15,11 @@ export class UsersService {
     private readonly userRepo: UserRepositoryPort,
   ) {}
 
-  async register(nome: string, email: string, senhaPlana: string): Promise<User> {
+  async register(
+    nome: string,
+    email: string,
+    senhaPlana: string,
+  ): Promise<User> {
     const existing = await this.userRepo.findByEmail(email);
     if (existing) {
       throw new EmailAlreadyExistsException(

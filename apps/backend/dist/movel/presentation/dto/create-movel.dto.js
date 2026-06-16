@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateMovelDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class CreateMovelDto {
     tipoMovel;
     dataInicioTrab;
@@ -21,22 +22,30 @@ class CreateMovelDto {
 exports.CreateMovelDto = CreateMovelDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'Comoda Luis XV' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateMovelDto.prototype, "tipoMovel", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '2021-08-15' }),
+    (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreateMovelDto.prototype, "dataInicioTrab", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: false }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateMovelDto.prototype, "restaurado", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 80 }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
 ], CreateMovelDto.prototype, "horasHomem", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 1 }),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
 ], CreateMovelDto.prototype, "atelieId", void 0);
 //# sourceMappingURL=create-movel.dto.js.map

@@ -1,9 +1,3 @@
-import {
-  BadRequestException,
-  ConflictException,
-  NotFoundException,
-} from '@nestjs/common';
-
 export class MovelCampoObrigatorioException extends Error {
   constructor(campo: string) {
     super(`${campo} e obrigatorio`);

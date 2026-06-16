@@ -21,6 +21,10 @@ export interface Atelie {
   areaOficinaM2: number;
 }
 
+export interface AtelieComMoveis extends Atelie {
+  moveis: Movel[];
+}
+
 export interface Movel {
   id: number;
   tipoMovel: string;
@@ -28,6 +32,7 @@ export interface Movel {
   restaurado: boolean;
   horasHomem: number;
   atelieId: number;
+  ownerUserId?: number | null;
 }
 
 export interface AppUser {

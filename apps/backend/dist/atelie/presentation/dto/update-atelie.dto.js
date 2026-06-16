@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateAtelieDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class UpdateAtelieDto {
     especialidadeEra;
     dataFundacao;
@@ -20,18 +21,26 @@ class UpdateAtelieDto {
 exports.UpdateAtelieDto = UpdateAtelieDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 'Luis XV' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], UpdateAtelieDto.prototype, "especialidadeEra", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: '2000-04-20' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], UpdateAtelieDto.prototype, "dataFundacao", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: true }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], UpdateAtelieDto.prototype, "equipadoCompleto", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 120 }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(50),
     __metadata("design:type", Number)
 ], UpdateAtelieDto.prototype, "areaOficinaM2", void 0);
 //# sourceMappingURL=update-atelie.dto.js.map

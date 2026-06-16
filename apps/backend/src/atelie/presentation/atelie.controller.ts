@@ -8,7 +8,12 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { AtelieService } from '../application/atelie.service';
 import { CreateAtelieDto } from './dto/create-atelie.dto';
 import { UpdateAtelieDto } from './dto/update-atelie.dto';
@@ -78,4 +83,3 @@ export class AtelieController {
     return this.atelieService.delete(Number(id));
   }
 }
-

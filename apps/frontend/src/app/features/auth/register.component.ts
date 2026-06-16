@@ -3,60 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { extractApiError } from '../../core/api-error.util';
+import { UiButtonComponent } from '../../shared/ui/ui-button.component';
+import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
-  template: `
-    <div class="mx-auto mt-16 max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
-      <h2 class="mb-2 text-2xl font-semibold">Criar conta</h2>
-      <p class="mb-4 text-sm text-stone-600">Após o cadastro, aguarde a liberação do administrador.</p>
-
-      @if (successMessage()) {
-        <div class="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">{{ successMessage() }}</div>
-      }
-
-      @if (errorMessage()) {
-        <div class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{{ errorMessage() }}</div>
-      }
-
-      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
-        <div>
-          <label class="mb-1 block text-sm font-medium">Nome</label>
-          <input formControlName="nome" class="w-full rounded-md border border-stone-300 px-3 py-2" />
-          @if (fieldError('nome')) {
-            <p class="mt-1 text-sm text-red-600">{{ fieldError('nome') }}</p>
-          }
-        </div>
-        <div>
-          <label class="mb-1 block text-sm font-medium">E-mail</label>
-          <input type="email" formControlName="email" class="w-full rounded-md border border-stone-300 px-3 py-2" />
-          @if (fieldError('email')) {
-            <p class="mt-1 text-sm text-red-600">{{ fieldError('email') }}</p>
-          }
-        </div>
-        <div>
-          <label class="mb-1 block text-sm font-medium">Senha</label>
-          <input type="password" formControlName="senha" class="w-full rounded-md border border-stone-300 px-3 py-2" />
-          @if (fieldError('senha')) {
-            <p class="mt-1 text-sm text-red-600">{{ fieldError('senha') }}</p>
-          }
-        </div>
-        <button
-          type="submit"
-          [disabled]="loading()"
-          class="w-full rounded-md bg-amber-800 px-4 py-2 text-white hover:bg-amber-700 disabled:opacity-60"
-        >
-          @if (loading()) { Cadastrando... } @else { Cadastrar }
-        </button>
-      </form>
-
-      <p class="mt-4 text-sm">
-        Já possui conta?
-        <a routerLink="/login" class="text-amber-800 hover:underline">Entrar</a>
-      </p>
-    </div>
-  `,
+  imports: [ReactiveFormsModule, RouterLink, UiButtonComponent, UiCardComponent],
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

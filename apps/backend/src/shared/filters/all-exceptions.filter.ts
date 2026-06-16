@@ -71,7 +71,9 @@ export class AppExceptionFilter implements ExceptionFilter {
     return body;
   }
 
-  private handleValidationException(exception: HttpException): StandardErrorResponse {
+  private handleValidationException(
+    exception: HttpException,
+  ): StandardErrorResponse {
     const response = exception.getResponse() as {
       message?: string | string[];
       errors?: Record<string, string>;
@@ -88,7 +90,6 @@ export class AppExceptionFilter implements ExceptionFilter {
     const messages = Array.isArray(response.message)
       ? response.message
       : [response.message ?? 'Existem campos inválidos no formulário.'];
-
 
     const errors: Record<string, string> = {};
 
@@ -229,7 +230,10 @@ export class AppExceptionFilter implements ExceptionFilter {
     }
 
     if (exception instanceof UserNotFoundException) {
-      return this.buildResponse(HttpStatus.NOT_FOUND, 'Usuário não encontrado.');
+      return this.buildResponse(
+        HttpStatus.NOT_FOUND,
+        'Usuário não encontrado.',
+      );
     }
 
     if (exception instanceof EmailAlreadyExistsException) {
@@ -246,7 +250,7 @@ export class AppExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
-      if (status === HttpStatus.BAD_REQUEST) {
+      if (status === 400) {
         const response = exception.getResponse();
         if (
           typeof response === 'object' &&

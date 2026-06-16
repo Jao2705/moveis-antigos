@@ -59,6 +59,7 @@ export class AtelieTypeOrmRepository implements AtelieRepositoryPort {
         restaurado: movel.restaurado,
         horasHomem: movel.horasHomem,
         atelieId: movel.atelieId,
+        ownerUserId: movel.ownerUserId,
       })),
     };
   }

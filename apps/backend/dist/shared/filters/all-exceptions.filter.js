@@ -123,7 +123,7 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
         }
         if (exception instanceof common_1.HttpException) {
             const status = exception.getStatus();
-            if (status === common_1.HttpStatus.BAD_REQUEST) {
+            if (status === 400) {
                 const response = exception.getResponse();
                 if (typeof response === 'object' &&
                     response !== null &&

@@ -1,0 +1,46 @@
+<div class="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
+  <ui-card tone="glass" class="overflow-hidden">
+    <div class="relative">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(217,119,6,0.18),_transparent_35%)]"></div>
+      <div class="relative space-y-6">
+        <div class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-amber-800">
+          Operação ativa
+        </div>
+        <div class="space-y-3">
+          <h1 class="max-w-2xl text-4xl font-black tracking-tight text-stone-950 sm:text-5xl">
+            Bem-vindo, {{ auth.user()?.nome || 'artesão' }}.
+          </h1>
+          <p class="max-w-2xl text-base leading-7 text-stone-600 sm:text-lg">
+            Controle os ateliês, abra cada oficina para ver os móveis vinculados e gerencie a equipe em uma tela pensada para fluxo rápido.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a routerLink="/atelie" ui-button>Ver ateliês</a>
+          @if (auth.isAdmin()) {
+            <a routerLink="/atelie/novo" ui-button variant="secondary">Novo ateliê</a>
+          }
+        </div>
+      </div>
+    </div>
+  </ui-card>
+
+  <div class="grid gap-4">
+    <ui-card tone="muted">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Perfil</p>
+      <p class="mt-2 text-2xl font-bold text-stone-950">{{ auth.user()?.role === 'admin' ? 'Administrador' : 'Usuário' }}</p>
+      <p class="mt-1 text-sm text-stone-600">Acesso autenticado para a conta {{ auth.user()?.email }}</p>
+    </ui-card>
+    <ui-card>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Atalho</p>
+      <div class="mt-4 grid gap-3">
+        <a routerLink="/atelie" class="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900 transition hover:border-amber-200 hover:bg-amber-100">
+          Abrir ateliês
+        </a>
+        <a routerLink="/atelie" class="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm font-semibold text-stone-800 transition hover:border-amber-200 hover:bg-amber-50">
+          Gerenciar ateliês
+        </a>
+      </div>
+    </ui-card>
+  </div>
+</div>

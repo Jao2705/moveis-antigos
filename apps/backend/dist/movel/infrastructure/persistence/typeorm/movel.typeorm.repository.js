@@ -30,6 +30,7 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
             restaurado: movel.restaurado,
             horasHomem: movel.horasHomem,
             atelieId: movel.atelieId,
+            ownerUserId: movel.ownerUserId,
         });
         const saved = await this.repo.save(orm);
         return this.toDomain(saved);
@@ -55,6 +56,7 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
         orm.restaurado = movel.restaurado;
         orm.horasHomem = movel.horasHomem;
         orm.atelieId = movel.atelieId;
+        orm.ownerUserId = movel.ownerUserId;
         const saved = await this.repo.save(orm);
         return this.toDomain(saved);
     }
@@ -82,7 +84,7 @@ let MovelTypeOrmRepository = class MovelTypeOrmRepository {
         return total > 0;
     }
     toDomain = (orm) => {
-        return new movel_1.Movel(orm.id, orm.tipoMovel, orm.dataInicioTrab, orm.restaurado, orm.horasHomem, orm.atelieId);
+        return new movel_1.Movel(orm.id, orm.tipoMovel, orm.dataInicioTrab, orm.restaurado, orm.horasHomem, orm.atelieId, orm.ownerUserId ?? null);
     };
 };
 exports.MovelTypeOrmRepository = MovelTypeOrmRepository;

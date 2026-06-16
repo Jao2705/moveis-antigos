@@ -1,3 +1,118 @@
 @import "tailwindcss";
+@source "./app/**/*.{html,ts}";
 
-/* You can add global styles to this file, and also import other style files */
+@theme {
+  /* === PALETA RELICÁRIO (Amber/Warm) === */
+  --color-amber-50:  oklch(97% 0.02 80);
+  --color-amber-100: oklch(93% 0.05 80);
+  --color-amber-200: oklch(87% 0.09 75);
+  --color-amber-300: oklch(80% 0.13 72);
+  --color-amber-400: oklch(72% 0.16 68);
+  --color-amber-500: oklch(63% 0.17 65);
+  --color-amber-600: oklch(54% 0.16 60);
+  --color-amber-700: oklch(45% 0.14 55);
+  --color-amber-800: oklch(36% 0.11 50);
+  --color-amber-900: oklch(28% 0.08 45);
+  --color-amber-950: oklch(20% 0.05 40);
+
+  /* === TOKENS SEMÂNTICOS (Light) === */
+  --color-primary:            var(--color-amber-700);
+  --color-primary-foreground:  oklch(98% 0 0);
+  --color-primary-hover:       var(--color-amber-800);
+
+  --color-background:          oklch(98% 0.008 80);
+  --color-foreground:          oklch(20% 0.03 55);
+
+  --color-surface:             oklch(100% 0 0);
+  --color-surface-foreground:  oklch(20% 0.03 55);
+
+  --color-muted:               oklch(95% 0.01 80);
+  --color-muted-foreground:    oklch(48% 0.03 55);
+
+  --color-border:              oklch(88% 0.02 75);
+  --color-ring:                var(--color-amber-600);
+
+  --color-card:                var(--color-surface);
+  --color-card-foreground:     var(--color-surface-foreground);
+
+  --color-success:             oklch(58% 0.16 145);
+  --color-success-foreground:  oklch(98% 0 0);
+
+  --color-warning:             oklch(74% 0.15 75);
+  --color-warning-foreground:  oklch(25% 0.06 65);
+
+  --color-destructive:         oklch(54% 0.2 27);
+  --color-destructive-foreground: oklch(98% 0 0);
+
+  --color-info:                oklch(58% 0.15 250);
+  --color-info-foreground:     oklch(98% 0 0);
+
+  /* === RADIUS === */
+  --radius-sm:  0.25rem;
+  --radius-md:  0.5rem;
+  --radius-lg:  0.75rem;
+  --radius-xl:  1rem;
+  --radius-full: 9999px;
+
+  /* === SOMBRAS === */
+  --shadow-card: 0 1px 3px oklch(0% 0 0 / 0.08), 0 1px 2px oklch(0% 0 0 / 0.04);
+  --shadow-elevated: 0 4px 12px oklch(0% 0 0 / 0.1), 0 2px 4px oklch(0% 0 0 / 0.06);
+
+  /* === ANIMAÇÕES === */
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+  --animate-slide-left: slide-left 0.25s ease-out;
+  --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(0.5rem); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-left {
+    from { opacity: 0; transform: translateX(-1rem); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(2rem); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
+
+/* Dark mode variant */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Dark mode theme overrides */
+.dark {
+  --color-background:         oklch(15% 0.02 55);
+  --color-foreground:         oklch(92% 0.01 80);
+
+  --color-surface:            oklch(20% 0.025 55);
+  --color-surface-foreground: oklch(92% 0.01 80);
+
+  --color-muted:              oklch(25% 0.015 55);
+  --color-muted-foreground:   oklch(65% 0.02 75);
+
+  --color-border:             oklch(28% 0.02 55);
+  --color-ring:               var(--color-amber-500);
+
+  --color-primary:            var(--color-amber-500);
+  --color-primary-foreground: oklch(15% 0.03 55);
+  --color-primary-hover:      var(--color-amber-600);
+
+  --color-card:               var(--color-surface);
+  --color-card-foreground:    var(--color-surface-foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary transition-colors duration-200;
+  }
+}

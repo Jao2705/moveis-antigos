@@ -2,68 +2,13 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { UsersApiService } from '../../core/users-api.service';
 import { AppUser } from '../../core/models';
 import { extractApiError } from '../../core/api-error.util';
+import { UiButtonComponent } from '../../shared/ui/ui-button.component';
+import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
 @Component({
   selector: 'app-users-list',
-  template: `
-    <section>
-      <h2 class="mb-4 text-2xl font-semibold">Usuários</h2>
-
-      @if (loading()) {
-        <p class="text-stone-600">Carregando usuários...</p>
-      } @else if (errorMessage()) {
-        <div class="rounded-md bg-red-50 p-3 text-sm text-red-700">{{ errorMessage() }}</div>
-      } @else if (items().length === 0) {
-        <div class="rounded-md border border-dashed border-stone-300 p-6 text-stone-600">
-          Nenhum usuário cadastrado.
-        </div>
-      } @else {
-        @if (actionMessage()) {
-          <div class="mb-4 rounded-md bg-green-50 p-3 text-sm text-green-800">{{ actionMessage() }}</div>
-        }
-        @if (actionError()) {
-          <div class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{{ actionError() }}</div>
-        }
-        <div class="overflow-x-auto rounded-xl border border-stone-200 bg-white">
-          <table class="min-w-full text-sm">
-            <thead class="bg-stone-100 text-left">
-              <tr>
-                <th class="px-4 py-3">Nome</th>
-                <th class="px-4 py-3">E-mail</th>
-                <th class="px-4 py-3">Perfil</th>
-                <th class="px-4 py-3">Status</th>
-                <th class="px-4 py-3">Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of items(); track user.id) {
-                <tr class="border-t border-stone-100">
-                  <td class="px-4 py-3">{{ user.nome }}</td>
-                  <td class="px-4 py-3">{{ user.email }}</td>
-                  <td class="px-4 py-3">{{ user.role }}</td>
-                  <td class="px-4 py-3">{{ user.ativo ? 'Ativo' : 'Inativo' }}</td>
-                  <td class="px-4 py-3">
-                    <button
-                      type="button"
-                      class="rounded-md border px-3 py-1 hover:bg-stone-50"
-                      [disabled]="updatingId() === user.id"
-                      (click)="toggleActive(user)"
-                    >
-                      @if (updatingId() === user.id) {
-                        Salvando...
-                      } @else {
-                        {{ user.ativo ? 'Desativar' : 'Ativar' }}
-                      }
-                    </button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </section>
-  `,
+  imports: [UiButtonComponent, UiCardComponent],
+  templateUrl: './users-list.component.html',
 })
 export class UsersListComponent implements OnInit {
   private readonly api = inject(UsersApiService);
