@@ -80,7 +80,7 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
             return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'O campo equipado é obrigatório e deve ser um valor booleano.', { equipadoCompleto: exception.message });
         }
         if (exception instanceof area_exception_1.AreaExistsException) {
-            return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'A área da oficina deve ser maior ou igual a 50m².', { areaOficinaM2: exception.message });
+            return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'A área da oficina deve ser maior ou igual a 40m².', { areaOficinaM2: exception.message });
         }
         if (exception instanceof data_exception_1.DataException) {
             return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'A data de fundação é inválida.', { dataFundacao: exception.message });
@@ -89,7 +89,10 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
             return this.buildResponse(common_1.HttpStatus.NOT_FOUND, 'Móvel não encontrado.');
         }
         if (exception instanceof movel_exceptions_1.MovelCampoObrigatorioException) {
-            return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, exception.message);
+            const field = exception.message.match(/^(\w+)\s+e obrigatorio/)?.[1] ?? 'form';
+            return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, exception.message, {
+                [field]: exception.message,
+            });
         }
         if (exception instanceof movel_exceptions_1.MovelDataInicioInvalidaException) {
             return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'Data de início do trabalho inválida.', { dataInicioTrab: exception.message });
@@ -110,7 +113,7 @@ let AppExceptionFilter = AppExceptionFilter_1 = class AppExceptionFilter {
             return this.buildResponse(common_1.HttpStatus.BAD_REQUEST, 'A data de início do trabalho não pode ser anterior à data de fundação do ateliê.', { dataInicioTrab: exception.message });
         }
         if (exception instanceof movel_exceptions_1.MovelDuplicadoEmRestauracaoException) {
-            return this.buildResponse(common_1.HttpStatus.CONFLICT, 'Já existe um móvel desse tipo em restauração para este ateliê.');
+            return this.buildResponse(common_1.HttpStatus.CONFLICT, 'Já existe um móvel desse tipo em restauração para este ateliê.', { tipoMovel: exception.message });
         }
         if (exception instanceof user_exceptions_1.UserNotFoundException) {
             return this.buildResponse(common_1.HttpStatus.NOT_FOUND, 'Usuário não encontrado.');

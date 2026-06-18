@@ -25,7 +25,7 @@ export class AtelieFormComponent implements OnInit {
   readonly fieldErrors = signal<Record<string, string>>({});
 
   readonly form = this.fb.nonNullable.group({
-    especialidadeEra: ['', Validators.required],
+    especialidadeEra: ['', [Validators.required, Validators.maxLength(100)]],
     dataFundacao: ['', Validators.required],
     areaOficinaM2: [50, [Validators.required, Validators.min(50)]],
     equipadoCompleto: [false],
@@ -65,7 +65,33 @@ export class AtelieFormComponent implements OnInit {
   }
 
   fieldError(field: string): string | null {
-    return this.fieldErrors()[field] ?? null;
+    const backendError = this.fieldErrors()[field];
+    if (backendError) {
+      return backendError;
+    }
+
+    const control = this.form.get(field);
+    if (!control || !control.touched || !control.invalid) {
+      return null;
+    }
+
+    if (control.hasError('required')) {
+      return field === 'especialidadeEra'
+        ? 'A especialidade / era é obrigatória.'
+        : field === 'dataFundacao'
+          ? 'A data de fundação é obrigatória.'
+          : 'Este campo é obrigatório.';
+    }
+
+    if (control.hasError('min')) {
+      return 'A área da oficina deve ter no mínimo 50 m².';
+    }
+
+    if (control.hasError('maxlength')) {
+      return 'A especialidade / era deve ter no máximo 100 caracteres.';
+    }
+
+    return 'Valor inválido.';
   }
 
   submit(): void {
@@ -74,6 +100,7 @@ export class AtelieFormComponent implements OnInit {
     this.fieldErrors.set({});
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorMessage.set('Corrija os campos destacados para registrar o ateliê.');
       return;
     }
 
@@ -82,14 +109,14 @@ export class AtelieFormComponent implements OnInit {
 
     const request$ = this.isEdit() && this.editId
       ? this.api.update(this.editId, {
-          areaOficinaM2: value.areaOficinaM2,
-          equipadoCompleto: value.equipadoCompleto,
-        })
+        areaOficinaM2: value.areaOficinaM2,
+        equipadoCompleto: value.equipadoCompleto,
+      })
       : this.api.create(value);
 
     request$.subscribe({
       next: () => {
-        this.successMessage.set('Ateliê salvo com sucesso.');
+        this.successMessage.set('Ateliê registrado com sucesso.');
         setTimeout(() => this.router.navigate(['/atelie']), 1000);
       },
       error: (error) => {

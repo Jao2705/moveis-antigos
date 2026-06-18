@@ -25,7 +25,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 200 }),
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.Min)(1),
+    (0, class_validator_1.Min)(10),
     __metadata("design:type", Number)
 ], UpdateMovelDto.prototype, "horasHomem", void 0);
 //# sourceMappingURL=update-movel.dto.js.map

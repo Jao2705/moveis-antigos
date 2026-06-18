@@ -154,7 +154,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     if (exception instanceof AreaExistsException) {
       return this.buildResponse(
         HttpStatus.BAD_REQUEST,
-        'A área da oficina deve ser maior ou igual a 50m².',
+        'A área da oficina deve ser maior ou igual a 40m².',
         { areaOficinaM2: exception.message },
       );
     }
@@ -172,7 +172,11 @@ export class AppExceptionFilter implements ExceptionFilter {
     }
 
     if (exception instanceof MovelCampoObrigatorioException) {
-      return this.buildResponse(HttpStatus.BAD_REQUEST, exception.message);
+      const field =
+        exception.message.match(/^(\w+)\s+e obrigatorio/)?.[1] ?? 'form';
+      return this.buildResponse(HttpStatus.BAD_REQUEST, exception.message, {
+        [field]: exception.message,
+      });
     }
 
     if (exception instanceof MovelDataInicioInvalidaException) {
@@ -226,6 +230,7 @@ export class AppExceptionFilter implements ExceptionFilter {
       return this.buildResponse(
         HttpStatus.CONFLICT,
         'Já existe um móvel desse tipo em restauração para este ateliê.',
+        { tipoMovel: exception.message },
       );
     }
 

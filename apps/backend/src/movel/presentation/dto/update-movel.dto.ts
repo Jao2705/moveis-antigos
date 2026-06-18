@@ -8,6 +8,6 @@ export class UpdateMovelDto {
 
   @ApiPropertyOptional({ example: 200 })
   @IsNumber()
-  @Min(1)
+  @Min(10)
   horasHomem: number;
 }

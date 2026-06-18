@@ -34,7 +34,7 @@ export class MovelFormComponent implements OnInit {
     tipoMovel: ['', Validators.required],
     dataInicioTrab: ['', Validators.required],
     restaurado: [false],
-    horasHomem: [40, [Validators.required, Validators.min(1)]],
+    horasHomem: [40, [Validators.required, Validators.min(10)]],
   });
 
   atelieId: number | null = null;
@@ -92,7 +92,29 @@ export class MovelFormComponent implements OnInit {
   }
 
   fieldError(field: string): string | null {
-    return this.fieldErrors()[field] ?? null;
+    const backendError = this.fieldErrors()[field];
+    if (backendError) {
+      return backendError;
+    }
+
+    const control = this.form.get(field);
+    if (!control || !control.touched || !control.invalid) {
+      return null;
+    }
+
+    if (control.hasError('required')) {
+      return field === 'tipoMovel'
+        ? 'O tipo do móvel é obrigatório.'
+        : field === 'dataInicioTrab'
+          ? 'A data de início é obrigatória.'
+          : 'Este campo é obrigatório.';
+    }
+
+    if (control.hasError('min')) {
+      return 'As horas-homem devem ter no mínimo 10 horas.';
+    }
+
+    return 'Valor inválido.';
   }
 
   submit(): void {
@@ -106,6 +128,7 @@ export class MovelFormComponent implements OnInit {
     }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.errorMessage.set('Corrija os campos destacados para salvar o móvel.');
       return;
     }
 

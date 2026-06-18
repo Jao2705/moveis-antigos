@@ -17,7 +17,7 @@ export class CreateMovelDto {
 
   @ApiProperty({ example: 80 })
   @IsNumber()
-  @Min(1)
+  @Min(10)
   horasHomem: number;
 
   @ApiProperty({ example: 1 })

@@ -39,7 +39,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 80 }),
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.Min)(1),
+    (0, class_validator_1.Min)(10),
     __metadata("design:type", Number)
 ], CreateMovelDto.prototype, "horasHomem", void 0);
 __decorate([
