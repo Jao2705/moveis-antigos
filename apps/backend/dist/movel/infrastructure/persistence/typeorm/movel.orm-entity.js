@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovelOrmEntity = void 0;
 const typeorm_1 = require("typeorm");
 const atelie_orm_entity_1 = require("../../../../atelie/infrastructure/persistence/typeorm/atelie.orm-entity");
+const user_orm_entity_1 = require("../../../../users/infrastructure/persistence/typeorm/user.orm-entity");
 let MovelOrmEntity = class MovelOrmEntity {
     id;
     tipoMovel;
@@ -19,7 +20,9 @@ let MovelOrmEntity = class MovelOrmEntity {
     restaurado;
     horasHomem;
     atelieId;
+    ownerUserId;
     atelie;
+    owner;
 };
 exports.MovelOrmEntity = MovelOrmEntity;
 __decorate([
@@ -47,12 +50,24 @@ __decorate([
     __metadata("design:type", Number)
 ], MovelOrmEntity.prototype, "atelieId", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Object)
+], MovelOrmEntity.prototype, "ownerUserId", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => atelie_orm_entity_1.AtelieOrmEntity, (atelie) => atelie.moveis, {
         onDelete: 'CASCADE',
     }),
     (0, typeorm_1.JoinColumn)({ name: 'atelieId' }),
     __metadata("design:type", atelie_orm_entity_1.AtelieOrmEntity)
 ], MovelOrmEntity.prototype, "atelie", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_orm_entity_1.UserOrmEntity, {
+        onDelete: 'SET NULL',
+        nullable: true,
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'ownerUserId' }),
+    __metadata("design:type", Object)
+], MovelOrmEntity.prototype, "owner", void 0);
 exports.MovelOrmEntity = MovelOrmEntity = __decorate([
     (0, typeorm_1.Entity)('movel')
 ], MovelOrmEntity);

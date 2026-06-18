@@ -11,7 +11,10 @@ import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'secretKey123',
-      signOptions: { expiresIn: '1d' },
+      signOptions: {
+        expiresIn: (process.env.JWT_EXPIRES_IN ||
+          '60m') as `${number}${'s' | 'm' | 'h' | 'd'}`,
+      },
     }),
     forwardRef(() => UsersModule),
   ],

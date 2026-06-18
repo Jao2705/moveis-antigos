@@ -11,5 +11,6 @@ export interface AtelieComMoveis {
         restaurado: boolean;
         horasHomem: number;
         atelieId: number;
+        ownerUserId: number | null;
     }[];
 }

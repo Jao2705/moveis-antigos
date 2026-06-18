@@ -1,0 +1,57 @@
+<ui-card tone="glass">
+  <div class="space-y-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-stone-500">Administração</p>
+        <h1 class="text-3xl font-black text-stone-950">Usuários</h1>
+      </div>
+      <button type="button" ui-button variant="ghost" (click)="load()">Atualizar lista</button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ errorMessage() }}</div>
+    }
+    @if (actionMessage()) {
+      <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{{ actionMessage() }}</div>
+    }
+    @if (actionError()) {
+      <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{{ actionError() }}</div>
+    }
+
+    @if (loading()) {
+      <p class="text-sm text-stone-600">Carregando usuários...</p>
+    } @else if (items().length === 0) {
+      <p class="rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-4 py-8 text-center text-sm text-stone-600">Nenhum usuário cadastrado.</p>
+    } @else {
+      <div class="overflow-hidden rounded-3xl border border-stone-200 bg-white">
+        <div class="grid grid-cols-[1.1fr_1.2fr_0.7fr_0.7fr] gap-4 border-b border-stone-200 bg-stone-50 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">
+          <span>Nome</span>
+          <span>Email</span>
+          <span>Perfil</span>
+          <span>Status</span>
+        </div>
+
+        <div class="divide-y divide-stone-200">
+          @for (user of items(); track user.id) {
+            <div class="grid grid-cols-1 gap-3 px-5 py-4 sm:grid-cols-[1.1fr_1.2fr_0.7fr_0.7fr] sm:items-center">
+              <div>
+                <p class="font-semibold text-stone-950">{{ user.nome }}</p>
+                <p class="text-sm text-stone-500">ID #{{ user.id }}</p>
+              </div>
+              <p class="text-sm text-stone-700">{{ user.email }}</p>
+              <span class="inline-flex w-fit rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">{{ user.role }}</span>
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold" [class.bg-emerald-50]="user.ativo" [class.text-emerald-700]="user.ativo" [class.bg-stone-100]="!user.ativo" [class.text-stone-600]="!user.ativo">
+                  {{ user.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+                <button type="button" ui-button [disabled]="updatingId() === user.id" (click)="toggleActive(user)">
+                  {{ user.ativo ? 'Desativar' : 'Ativar' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</ui-card>

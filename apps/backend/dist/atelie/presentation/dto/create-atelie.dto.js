@@ -21,20 +21,25 @@ class CreateAtelieDto {
 exports.CreateAtelieDto = CreateAtelieDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'Barroco' }),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CreateAtelieDto.prototype, "especialidadeEra", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '2000-04-20' }),
+    (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], CreateAtelieDto.prototype, "dataFundacao", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: false }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateAtelieDto.prototype, "equipadoCompleto", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 100 }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.Min)(50),
     __metadata("design:type", Number)
 ], CreateAtelieDto.prototype, "areaOficinaM2", void 0);
 //# sourceMappingURL=create-atelie.dto.js.map

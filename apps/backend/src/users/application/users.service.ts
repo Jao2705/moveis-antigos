@@ -6,7 +6,6 @@ import {
   EmailAlreadyExistsException,
   UserNotFoundException,
   LastAdminException,
-  InvalidUserRoleException,
 } from '../domain/user.exceptions';
 
 @Injectable()
@@ -16,23 +15,20 @@ export class UsersService {
     private readonly userRepo: UserRepositoryPort,
   ) {}
 
-  async create(
+  async register(
     nome: string,
     email: string,
     senhaPlana: string,
-    role: 'admin' | 'user',
   ): Promise<User> {
-    if (role !== 'admin' && role !== 'user') {
-      throw new InvalidUserRoleException();
-    }
-
     const existing = await this.userRepo.findByEmail(email);
     if (existing) {
-      throw new EmailAlreadyExistsException();
+      throw new EmailAlreadyExistsException(
+        'Este e-mail já está cadastrado. Faça login ou use outro e-mail.',
+      );
     }
 
     const senha_hash = await bcrypt.hash(senhaPlana, 10);
-    const user = new User(null, nome, email, senha_hash, role);
+    const user = new User(null, nome, email, senha_hash, 'user', false);
     return this.userRepo.create(user);
   }
 
@@ -44,16 +40,28 @@ export class UsersService {
     return user;
   }
 
-  async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepo.findByEmail(email);
-    if (!user) {
-      throw new UserNotFoundException();
-    }
-    return user;
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepo.findByEmail(email);
   }
 
   async findAll(): Promise<User[]> {
     return this.userRepo.findAll();
+  }
+
+  async setActive(id: number, ativo: boolean): Promise<User> {
+    const user = await this.findById(id);
+
+    if (user.role === 'admin' && !ativo) {
+      const adminsCount = await this.userRepo.countAdmins();
+      if (adminsCount <= 1) {
+        throw new LastAdminException(
+          'Não é possível desativar o único administrador do sistema.',
+        );
+      }
+    }
+
+    user.ativo = ativo;
+    return this.userRepo.update(user);
   }
 
   async updateProfile(
@@ -79,41 +87,5 @@ export class UsersService {
     }
 
     return this.userRepo.update(user);
-  }
-
-  async updateRole(
-    id: number,
-    newRole: 'admin' | 'user',
-  ): Promise<User> {
-    if (newRole !== 'admin' && newRole !== 'user') {
-      throw new InvalidUserRoleException();
-    }
-
-    const user = await this.findById(id);
-
-    if (user.role === newRole) {
-      return user;
-    }
-
-    if (user.role === 'admin' && newRole === 'user') {
-      const adminsCount = await this.userRepo.countAdmins();
-      if (adminsCount <= 1) {
-        throw new LastAdminException();
-      }
-    }
-
-    user.role = newRole;
-    return this.userRepo.update(user);
-  }
-
-  async delete(id: number): Promise<User> {
-    const user = await this.findById(id);
-    if (user.role === 'admin') {
-      const adminsCount = await this.userRepo.countAdmins();
-      if (adminsCount <= 1) {
-        throw new LastAdminException();
-      }
-    }
-    return this.userRepo.delete(id);
   }
 }

@@ -20,7 +20,9 @@ export class InvalidUserRoleException extends Error {
 }
 
 export class LastAdminException extends Error {
-  constructor(message = 'Não é possível rebaixar ou remover o único administrador do sistema') {
+  constructor(
+    message = 'Não é possível rebaixar ou remover o único administrador do sistema',
+  ) {
     super(message);
     this.name = 'LastAdminException';
   }

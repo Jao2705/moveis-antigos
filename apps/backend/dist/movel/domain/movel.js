@@ -8,13 +8,15 @@ class Movel {
     restaurado;
     horasHomem;
     atelieId;
-    constructor(id, tipoMovel, dataInicioTrab, restaurado, horasHomem, atelieId) {
+    ownerUserId;
+    constructor(id, tipoMovel, dataInicioTrab, restaurado, horasHomem, atelieId, ownerUserId) {
         this.id = id;
         this.tipoMovel = tipoMovel;
         this.dataInicioTrab = dataInicioTrab;
         this.restaurado = restaurado;
         this.horasHomem = horasHomem;
         this.atelieId = atelieId;
+        this.ownerUserId = ownerUserId;
     }
 }
 exports.Movel = Movel;

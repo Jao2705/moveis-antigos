@@ -13,12 +13,14 @@ const app_service_1 = require("./app.service");
 const typeorm_module_1 = require("./shared/database/typeorm.module");
 const atelie_module_1 = require("./atelie/atelie.module");
 const movel_module_1 = require("./movel/movel.module");
+const auth_module_1 = require("./auth/auth.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_module_1.DatabaseModule, atelie_module_1.AtelieModule, movel_module_1.MovelModule],
+        imports: [typeorm_module_1.DatabaseModule, auth_module_1.AuthModule, users_module_1.UsersModule, atelie_module_1.AtelieModule, movel_module_1.MovelModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

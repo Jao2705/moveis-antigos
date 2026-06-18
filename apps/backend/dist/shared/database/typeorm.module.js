@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const atelie_orm_entity_1 = require("../../atelie/infrastructure/persistence/typeorm/atelie.orm-entity");
 const movel_orm_entity_1 = require("../../movel/infrastructure/persistence/typeorm/movel.orm-entity");
+const user_orm_entity_1 = require("../../users/infrastructure/persistence/typeorm/user.orm-entity");
+const seeder_service_1 = require("./seeder.service");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
@@ -21,10 +23,12 @@ exports.DatabaseModule = DatabaseModule = __decorate([
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'sqlite',
                 database: 'data/moveis-antigos.db',
-                entities: [atelie_orm_entity_1.AtelieOrmEntity, movel_orm_entity_1.MovelOrmEntity],
+                entities: [atelie_orm_entity_1.AtelieOrmEntity, movel_orm_entity_1.MovelOrmEntity, user_orm_entity_1.UserOrmEntity],
                 synchronize: true,
             }),
+            typeorm_1.TypeOrmModule.forFeature([user_orm_entity_1.UserOrmEntity]),
         ],
+        providers: [seeder_service_1.SeederService],
         exports: [typeorm_1.TypeOrmModule],
     })
 ], DatabaseModule);

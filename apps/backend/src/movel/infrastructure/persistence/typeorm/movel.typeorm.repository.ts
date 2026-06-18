@@ -19,6 +19,7 @@ export class MovelTypeOrmRepository implements MovelRepositoryPort {
       restaurado: movel.restaurado,
       horasHomem: movel.horasHomem,
       atelieId: movel.atelieId,
+      ownerUserId: movel.ownerUserId,
     });
 
     const saved = await this.repo.save(orm);
@@ -50,6 +51,7 @@ export class MovelTypeOrmRepository implements MovelRepositoryPort {
     orm.restaurado = movel.restaurado;
     orm.horasHomem = movel.horasHomem;
     orm.atelieId = movel.atelieId;
+    orm.ownerUserId = movel.ownerUserId;
 
     const saved = await this.repo.save(orm);
     return this.toDomain(saved);
@@ -95,6 +97,7 @@ export class MovelTypeOrmRepository implements MovelRepositoryPort {
       orm.restaurado,
       orm.horasHomem,
       orm.atelieId,
+      orm.ownerUserId ?? null,
     );
   };
 }

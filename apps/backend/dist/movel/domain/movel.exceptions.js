@@ -15,43 +15,43 @@ class MovelDataInicioInvalidaException extends Error {
 exports.MovelDataInicioInvalidaException = MovelDataInicioInvalidaException;
 class MovelHorasHomemInvalidaException extends Error {
     constructor() {
-        super('horasHomem deve estar entre 10 e 1000');
+        super('Horas-homem deve estar entre 10 e 1000');
     }
 }
 exports.MovelHorasHomemInvalidaException = MovelHorasHomemInvalidaException;
 class MovelRestauradoInconsistenteException extends Error {
     constructor() {
-        super('se restaurado for true, horasHomem deve ser >= 40');
+        super('Se restaurado for true, horasHomem deve ser >= 40');
     }
 }
 exports.MovelRestauradoInconsistenteException = MovelRestauradoInconsistenteException;
 class MovelEmProcessoHorasInvalidaException extends Error {
     constructor() {
-        super('se restaurado for false, horasHomem nao pode ser 0');
+        super('Se restaurado for false, horasHomem nao pode ser 0');
     }
 }
 exports.MovelEmProcessoHorasInvalidaException = MovelEmProcessoHorasInvalidaException;
 class AtelieNaoEncontradoParaMovelException extends Error {
     constructor(atelieId) {
-        super(`Atelie com id ${atelieId} nao encontrado`);
+        super(`Ateliê com id ${atelieId} não encontrado`);
     }
 }
 exports.AtelieNaoEncontradoParaMovelException = AtelieNaoEncontradoParaMovelException;
 class MovelDataAnteriorFundacaoException extends Error {
     constructor() {
-        super('dataInicioTrab nao pode ser anterior a dataFundacao do atelie');
+        super('Data de início do trabalho não pode ser anterior à data de fundação do ateliê.');
     }
 }
 exports.MovelDataAnteriorFundacaoException = MovelDataAnteriorFundacaoException;
 class MovelDuplicadoEmRestauracaoException extends Error {
     constructor() {
-        super('Ja existe movel desse tipo em restauracao para esse atelie');
+        super('Já existe um móvel desse tipo em restauração para esse ateliê.');
     }
 }
 exports.MovelDuplicadoEmRestauracaoException = MovelDuplicadoEmRestauracaoException;
 class MovelNotFoundException extends Error {
     constructor(id) {
-        super(`Movel com id ${id} nao encontrado`);
+        super(`Móvel com id ${id} não encontrado`);
     }
 }
 exports.MovelNotFoundException = MovelNotFoundException;

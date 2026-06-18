@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import type { AtelieRepositoryPort } from 'src/atelie/application/ports/atelie.repository.port';
 import { Movel } from '../domain/movel';
 import {
@@ -29,6 +29,7 @@ export class MovelService {
     restaurado: boolean,
     horasHomem: number,
     atelieId: number,
+    ownerUserId: number,
   ): Promise<Movel> {
     const movel = new Movel(
       null,
@@ -37,6 +38,7 @@ export class MovelService {
       restaurado,
       horasHomem,
       atelieId,
+      ownerUserId,
     );
 
     await this.validarRegrasNegocio(movel);
@@ -59,11 +61,14 @@ export class MovelService {
     id: number,
     restaurado: boolean,
     horasHomem: number,
+    requester: { id: number; role: 'admin' | 'user' },
   ): Promise<Movel> {
     const movel = await this.movelRepo.findById(id);
     if (!movel) {
       throw new MovelNotFoundException(id);
     }
+
+    this.validarPermissaoDeAcesso(movel, requester);
 
     movel.restaurado = restaurado;
     movel.horasHomem = horasHomem;
@@ -72,12 +77,31 @@ export class MovelService {
     return this.movelRepo.update(movel);
   }
 
-  async delete(id: number): Promise<Movel> {
+  async delete(
+    id: number,
+    requester: { id: number; role: 'admin' | 'user' },
+  ): Promise<Movel> {
     const movel = await this.movelRepo.findById(id);
     if (!movel) {
       throw new MovelNotFoundException(id);
     }
+    this.validarPermissaoDeAcesso(movel, requester);
     return this.movelRepo.delete(id);
+  }
+
+  private validarPermissaoDeAcesso(
+    movel: Movel,
+    requester: { id: number; role: 'admin' | 'user' },
+  ): void {
+    if (requester.role === 'admin') {
+      return;
+    }
+
+    if (movel.ownerUserId !== requester.id) {
+      throw new ForbiddenException(
+        'Você só pode editar ou remover móveis cadastrados por você.',
+      );
+    }
   }
 
   private async validarRegrasNegocio(

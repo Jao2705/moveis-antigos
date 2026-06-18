@@ -18,6 +18,9 @@ const swagger_1 = require("@nestjs/swagger");
 const atelie_service_1 = require("../application/atelie.service");
 const create_atelie_dto_1 = require("./dto/create-atelie.dto");
 const update_atelie_dto_1 = require("./dto/update-atelie.dto");
+const jwt_auth_guard_1 = require("../../auth/infrastructure/guards/jwt-auth.guard");
+const roles_guard_1 = require("../../auth/infrastructure/guards/roles.guard");
+const roles_decorator_1 = require("../../auth/infrastructure/decorators/roles.decorator");
 let AtelieController = class AtelieController {
     atelieService;
     constructor(atelieService) {
@@ -45,7 +48,8 @@ let AtelieController = class AtelieController {
 exports.AtelieController = AtelieController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Cria um atelie' }),
+    (0, roles_decorator_1.Roles)('admin'),
+    (0, swagger_1.ApiOperation)({ summary: 'Cria um atelie (Admin)' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_atelie_dto_1.CreateAtelieDto]),
@@ -53,6 +57,7 @@ __decorate([
 ], AtelieController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiOperation)({ summary: 'Lista de atelies' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -60,6 +65,7 @@ __decorate([
 ], AtelieController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id/com-moveis'),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
     (0, swagger_1.ApiOperation)({ summary: 'Busca um atelie com seus moveis' }),
     __param(0, (0, common_1.Param)('id')),
@@ -69,6 +75,7 @@ __decorate([
 ], AtelieController.prototype, "findByIdComMoveis", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, roles_decorator_1.Roles)('admin', 'user'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
     (0, swagger_1.ApiOperation)({ summary: 'Busca um atelie por id' }),
     __param(0, (0, common_1.Param)('id')),
@@ -78,8 +85,9 @@ __decorate([
 ], AtelieController.prototype, "findById", null);
 __decorate([
     (0, common_1.Put)(':id'),
+    (0, roles_decorator_1.Roles)('admin'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualiza os dados de um atelie' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualiza os dados de um atelie (Admin)' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -88,8 +96,9 @@ __decorate([
 ], AtelieController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)('admin'),
     (0, swagger_1.ApiParam)({ name: 'id', example: 1 }),
-    (0, swagger_1.ApiOperation)({ summary: 'Remove um atelie' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove um atelie (Admin)' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -97,6 +106,8 @@ __decorate([
 ], AtelieController.prototype, "delete", null);
 exports.AtelieController = AtelieController = __decorate([
     (0, swagger_1.ApiTags)('atelie'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, common_1.Controller)('atelie'),
     __metadata("design:paramtypes", [atelie_service_1.AtelieService])
 ], AtelieController);

@@ -18,6 +18,7 @@ export class UserTypeOrmRepository implements UserRepositoryPort {
       email: user.email,
       senha_hash: user.senha_hash,
       role: user.role,
+      ativo: user.ativo,
     });
     const saved = await this.repo.save(orm);
     return this.toDomain(saved);
@@ -50,6 +51,7 @@ export class UserTypeOrmRepository implements UserRepositoryPort {
     orm.email = user.email;
     orm.senha_hash = user.senha_hash;
     orm.role = user.role;
+    orm.ativo = user.ativo;
     const saved = await this.repo.save(orm);
     return this.toDomain(saved);
   }
@@ -75,6 +77,7 @@ export class UserTypeOrmRepository implements UserRepositoryPort {
       orm.email,
       orm.senha_hash,
       orm.role,
+      orm.ativo,
       orm.created_at,
       orm.updated_at,
     );

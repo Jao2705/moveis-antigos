@@ -26,26 +26,14 @@ import {
 import {
   UserNotFoundException,
   EmailAlreadyExistsException,
-  InvalidUserRoleException,
   LastAdminException,
 } from 'src/users/domain/user.exceptions';
-import {
-  OrdemServicoNotFoundException,
-  OrdemServicoCancelamentoNaoPermitidoException,
-  OrdemServicoAcessoNegadoException,
-} from 'src/ordem-servico/domain/ordem-servico.exceptions';
 
-export interface ErrorDetail {
-  field?: string;
-  code: string;
-  description: string;
-}
-
-export interface ErrorResponse {
-  status: number;
+export interface StandardErrorResponse {
+  statusCode: number;
   message: string;
-  error: string;
-  details: ErrorDetail[];
+  timestamp: string;
+  errors?: Record<string, string>;
 }
 
 @Catch()
@@ -60,454 +48,229 @@ export class AppExceptionFilter implements ExceptionFilter {
     const errorResponse = this.resolveException(exception);
 
     this.logger.error(
-      `${request.method} ${request.url} -> ${errorResponse.status}`,
+      `${request.method} ${request.url} -> ${errorResponse.statusCode}`,
       exception instanceof Error ? exception.stack : String(exception),
     );
 
-    response.status(errorResponse.status).json(errorResponse);
+    response.status(errorResponse.statusCode).json(errorResponse);
   }
 
-  private handleAtelieNotFound(
-    exception: AtelieNotFoundException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.NOT_FOUND,
-      message: 'Ateliê não encontrado.',
-      error: 'ATELIE_NOT_FOUND',
-      details: [
-        {
-          field: 'id',
-          code: 'ATELIE_NOT_FOUND',
-          description: exception.message,
-        },
-      ],
+  private buildResponse(
+    statusCode: number,
+    message: string,
+    errors?: Record<string, string>,
+  ): StandardErrorResponse {
+    const body: StandardErrorResponse = {
+      statusCode,
+      message,
+      timestamp: new Date().toISOString(),
     };
+    if (errors && Object.keys(errors).length > 0) {
+      body.errors = errors;
+    }
+    return body;
   }
 
-  private handleEspecialidadeExistsException(
-    exception: EspecialidadeExistsException,
-  ): ErrorResponse {
-    const msg =
-      typeof exception.getResponse === 'string'
-        ? exception.getResponse
-        : exception.message;
-
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Especialidade inválida ou excede o limite de caracteres',
-      error: 'ESPECIALIDADE_EXISTS',
-      details: [
-        {
-          field: 'especialidadeEra',
-          code: 'ESPECIALIDADE_EXISTS',
-          description: msg,
-        },
-      ],
+  private handleValidationException(
+    exception: HttpException,
+  ): StandardErrorResponse {
+    const response = exception.getResponse() as {
+      message?: string | string[];
+      errors?: Record<string, string>;
     };
+
+    if (response.errors) {
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Existem campos inválidos no formulário.',
+        response.errors,
+      );
+    }
+
+    const messages = Array.isArray(response.message)
+      ? response.message
+      : [response.message ?? 'Existem campos inválidos no formulário.'];
+
+    const errors: Record<string, string> = {};
+
+    for (const item of messages) {
+      const match = item.match(/^(\w+)\s/);
+      const field = match?.[1] ?? 'form';
+      errors[field] = item;
+    }
+
+    return this.buildResponse(
+      HttpStatus.BAD_REQUEST,
+      'Existem campos inválidos no formulário.',
+      errors,
+    );
   }
 
-  private handleEquipadoExistsExcepiton(
-    exception: EquipadoExistsExcepiton,
-  ): ErrorResponse {
-    const msg =
-      typeof exception.getResponse === 'function' &&
-      typeof exception.getResponse() === 'string'
-        ? (exception.getResponse() as string)
-        : exception.message;
+  private handleHttpException(exception: HttpException): StandardErrorResponse {
+    const statusCode = exception.getStatus();
+    const response = exception.getResponse() as
+      | string
+      | { message?: string | string[]; errors?: Record<string, string> };
 
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'O campo equipado é obrigatório e deve ser um valor booleano',
-      error: 'EQUIPADO_INVALIDO',
-      details: [
-        {
-          field: 'equipadoCompleto',
-          code: 'EQUIPADO_INVALIDO',
-          description: msg,
-        },
-      ],
-    };
-  }
+    if (typeof response === 'object' && response.errors) {
+      const message =
+        typeof response.message === 'string'
+          ? response.message
+          : 'Existem campos inválidos no formulário.';
+      return this.buildResponse(statusCode, message, response.errors);
+    }
 
-  private handleAreaExistsException(
-    exception: AreaExistsException,
-  ): ErrorResponse {
-    const msg =
-      typeof exception.getResponse === 'function' &&
-      typeof exception.getResponse() === 'string'
-        ? (exception.getResponse() as string)
-        : exception.message;
-
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'A área da oficina deve ser maior ou igual a 50m²',
-      error: 'AREA_INVALIDA',
-      details: [
-        {
-          field: 'areaOficinaM2',
-          code: 'AREA_INVALIDA',
-          description: msg,
-        },
-      ],
-    };
-  }
-
-  private handleDataException(exception: DataException): ErrorResponse {
-    const msg =
-      typeof exception.getResponse === 'function' &&
-      typeof exception.getResponse() === 'string'
-        ? (exception.getResponse() as string)
-        : exception.message;
-
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'A data de fundação é inválida',
-      error: 'DATA_INVALIDA',
-      details: [
-        {
-          field: 'dataFundacao',
-          code: 'DATA_INVALIDA',
-          description: msg,
-        },
-      ],
-    };
-  }
-
-  private handleMovelNotFound(
-    exception: MovelNotFoundException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.NOT_FOUND,
-      message: 'Móvel não encontrado.',
-      error: 'MOVEL_NOT_FOUND',
-      details: [
-        {
-          field: 'id',
-          code: 'MOVEL_NOT_FOUND',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelCampoObrigatorio(
-    exception: MovelCampoObrigatorioException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Campo obrigatório não informado.',
-      error: 'MOVEL_CAMPO_OBRIGATORIO',
-      details: [
-        {
-          code: 'MOVEL_CAMPO_OBRIGATORIO',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelDataInicioInvalida(
-    exception: MovelDataInicioInvalidaException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Data de início do trabalho inválida.',
-      error: 'MOVEL_DATA_INICIO_INVALIDA',
-      details: [
-        {
-          field: 'dataInicioTrab',
-          code: 'MOVEL_DATA_INICIO_INVALIDA',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelHorasHomemInvalida(
-    exception: MovelHorasHomemInvalidaException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Quantidade de horas-homem inválida.',
-      error: 'MOVEL_HORAS_HOMEM_INVALIDA',
-      details: [
-        {
-          field: 'horasHomem',
-          code: 'MOVEL_HORAS_HOMEM_INVALIDA',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelRestauradoInconsistente(
-    exception: MovelRestauradoInconsistenteException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Inconsistência entre restaurado e horas-homem.',
-      error: 'MOVEL_RESTAURADO_INCONSISTENTE',
-      details: [
-        {
-          field: 'restaurado',
-          code: 'MOVEL_RESTAURADO_INCONSISTENTE',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelEmProcessoHorasInvalida(
-    exception: MovelEmProcessoHorasInvalidaException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Horas-homem inválidas para móvel em processo de restauração.',
-      error: 'MOVEL_EM_PROCESSO_HORAS_INVALIDA',
-      details: [
-        {
-          field: 'horasHomem',
-          code: 'MOVEL_EM_PROCESSO_HORAS_INVALIDA',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleAtelieNaoEncontradoParaMovel(
-    exception: AtelieNaoEncontradoParaMovelException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.NOT_FOUND,
-      message: 'Ateliê não encontrado para o móvel informado.',
-      error: 'ATELIE_NAO_ENCONTRADO_PARA_MOVEL',
-      details: [
-        {
-          field: 'atelieId',
-          code: 'ATELIE_NAO_ENCONTRADO_PARA_MOVEL',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelDataAnteriorFundacao(
-    exception: MovelDataAnteriorFundacaoException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message:
-        'A data de início do trabalho não pode ser anterior à data de fundação do ateliê.',
-      error: 'MOVEL_DATA_ANTERIOR_FUNDACAO',
-      details: [
-        {
-          field: 'dataInicioTrab',
-          code: 'MOVEL_DATA_ANTERIOR_FUNDACAO',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleMovelDuplicadoEmRestauracao(
-    exception: MovelDuplicadoEmRestauracaoException,
-  ): ErrorResponse {
-    return {
-      status: HttpStatus.CONFLICT,
-      message: 'Já existe um móvel desse tipo em restauração para este ateliê.',
-      error: 'MOVEL_DUPLICADO_EM_RESTAURACAO',
-      details: [
-        {
-          code: 'MOVEL_DUPLICADO_EM_RESTAURACAO',
-          description: exception.message,
-        },
-      ],
-    };
-  }
-
-  private handleHttpException(exception: HttpException): ErrorResponse {
-    const status = exception.getStatus();
-    const response = exception.getResponse() as any;
     const message =
       typeof response === 'string'
         ? response
-        : response.message || exception.message;
+        : Array.isArray(response.message)
+          ? response.message[0]
+          : (response.message ?? exception.message);
 
-    return {
-      status,
-      message: Array.isArray(message) ? message[0] : message,
-      error:
-        typeof response === 'string'
-          ? 'HTTP_EXCEPTION'
-          : response.error || 'HTTP_EXCEPTION',
-      details: [
-        {
-          code: 'HTTP_EXCEPTION',
-          description: Array.isArray(message) ? message.join(', ') : message,
-        },
-      ],
-    };
+    return this.buildResponse(statusCode, message);
   }
 
-  private handleUserNotFound(exception: UserNotFoundException): ErrorResponse {
-    return {
-      status: HttpStatus.NOT_FOUND,
-      message: 'Usuário não encontrado.',
-      error: 'USER_NOT_FOUND',
-      details: [{ code: 'USER_NOT_FOUND', description: exception.message }],
-    };
-  }
-
-  private handleEmailAlreadyExists(exception: EmailAlreadyExistsException): ErrorResponse {
-    return {
-      status: HttpStatus.CONFLICT,
-      message: 'E-mail já cadastrado no sistema.',
-      error: 'EMAIL_ALREADY_EXISTS',
-      details: [{ field: 'email', code: 'EMAIL_ALREADY_EXISTS', description: exception.message }],
-    };
-  }
-
-  private handleInvalidUserRole(exception: InvalidUserRoleException): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Perfil de usuário inválido.',
-      error: 'INVALID_USER_ROLE',
-      details: [{ field: 'role', code: 'INVALID_USER_ROLE', description: exception.message }],
-    };
-  }
-
-  private handleLastAdmin(exception: LastAdminException): ErrorResponse {
-    return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Ação não permitida para o único administrador do sistema.',
-      error: 'LAST_ADMIN_OPERATION_FAILED',
-      details: [{ code: 'LAST_ADMIN_OPERATION_FAILED', description: exception.message }],
-    };
-  }
-
-  private handleUnknown(exception: unknown): ErrorResponse {
-    const msg =
-      exception instanceof Error
-        ? exception.message
-        : 'Erro interno no servidor';
-
-    return {
-      status: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: 'Erro interno no servidor',
-      error: 'INTERNAL_SERVER_ERROR',
-      details: [
-        {
-          code: 'INTERNAL_SERVER_ERROR',
-          description: msg,
-        },
-      ],
-    };
-  }
-
-  private resolveException(exception: unknown): ErrorResponse {
+  private resolveException(exception: unknown): StandardErrorResponse {
     if (exception instanceof AtelieNotFoundException) {
-      return this.handleAtelieNotFound(exception);
+      return this.buildResponse(HttpStatus.NOT_FOUND, 'Ateliê não encontrado.');
     }
 
     if (exception instanceof EspecialidadeExistsException) {
-      return this.handleEspecialidadeExistsException(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Especialidade inválida ou excede o limite de caracteres.',
+        { especialidadeEra: exception.message },
+      );
     }
 
     if (exception instanceof EquipadoExistsExcepiton) {
-      return this.handleEquipadoExistsExcepiton(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'O campo equipado é obrigatório e deve ser um valor booleano.',
+        { equipadoCompleto: exception.message },
+      );
     }
 
     if (exception instanceof AreaExistsException) {
-      return this.handleAreaExistsException(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'A área da oficina deve ser maior ou igual a 40m².',
+        { areaOficinaM2: exception.message },
+      );
     }
 
     if (exception instanceof DataException) {
-      return this.handleDataException(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'A data de fundação é inválida.',
+        { dataFundacao: exception.message },
+      );
     }
 
     if (exception instanceof MovelNotFoundException) {
-      return this.handleMovelNotFound(exception);
+      return this.buildResponse(HttpStatus.NOT_FOUND, 'Móvel não encontrado.');
     }
 
     if (exception instanceof MovelCampoObrigatorioException) {
-      return this.handleMovelCampoObrigatorio(exception);
+      const field =
+        exception.message.match(/^(\w+)\s+e obrigatorio/)?.[1] ?? 'form';
+      return this.buildResponse(HttpStatus.BAD_REQUEST, exception.message, {
+        [field]: exception.message,
+      });
     }
 
     if (exception instanceof MovelDataInicioInvalidaException) {
-      return this.handleMovelDataInicioInvalida(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Data de início do trabalho inválida.',
+        { dataInicioTrab: exception.message },
+      );
     }
 
     if (exception instanceof MovelHorasHomemInvalidaException) {
-      return this.handleMovelHorasHomemInvalida(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Quantidade de horas-homem inválida.',
+        { horasHomem: exception.message },
+      );
     }
 
     if (exception instanceof MovelRestauradoInconsistenteException) {
-      return this.handleMovelRestauradoInconsistente(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Inconsistência entre restaurado e horas-homem.',
+        { restaurado: exception.message },
+      );
     }
 
     if (exception instanceof MovelEmProcessoHorasInvalidaException) {
-      return this.handleMovelEmProcessoHorasInvalida(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'Horas-homem inválidas para móvel em processo de restauração.',
+        { horasHomem: exception.message },
+      );
     }
 
     if (exception instanceof AtelieNaoEncontradoParaMovelException) {
-      return this.handleAtelieNaoEncontradoParaMovel(exception);
+      return this.buildResponse(
+        HttpStatus.NOT_FOUND,
+        'Ateliê não encontrado para o móvel informado.',
+      );
     }
 
     if (exception instanceof MovelDataAnteriorFundacaoException) {
-      return this.handleMovelDataAnteriorFundacao(exception);
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        'A data de início do trabalho não pode ser anterior à data de fundação do ateliê.',
+        { dataInicioTrab: exception.message },
+      );
     }
 
     if (exception instanceof MovelDuplicadoEmRestauracaoException) {
-      return this.handleMovelDuplicadoEmRestauracao(exception);
+      return this.buildResponse(
+        HttpStatus.CONFLICT,
+        'Já existe um móvel desse tipo em restauração para este ateliê.',
+        { tipoMovel: exception.message },
+      );
     }
 
     if (exception instanceof UserNotFoundException) {
-      return this.handleUserNotFound(exception);
+      return this.buildResponse(
+        HttpStatus.NOT_FOUND,
+        'Usuário não encontrado.',
+      );
     }
 
     if (exception instanceof EmailAlreadyExistsException) {
-      return this.handleEmailAlreadyExists(exception);
-    }
-
-    if (exception instanceof InvalidUserRoleException) {
-      return this.handleInvalidUserRole(exception);
+      return this.buildResponse(
+        HttpStatus.CONFLICT,
+        exception.message || 'E-mail já cadastrado no sistema.',
+        { email: exception.message },
+      );
     }
 
     if (exception instanceof LastAdminException) {
-      return this.handleLastAdmin(exception);
-    }
-
-    if (exception instanceof OrdemServicoNotFoundException) {
-      return {
-        status: HttpStatus.NOT_FOUND,
-        message: 'Ordem de serviço não encontrada.',
-        error: 'ORDEM_SERVICO_NOT_FOUND',
-        details: [{ code: 'ORDEM_SERVICO_NOT_FOUND', description: exception.message }],
-      };
-    }
-
-    if (exception instanceof OrdemServicoCancelamentoNaoPermitidoException) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        message: 'Cancelamento não permitido para esta ordem.',
-        error: 'ORDEM_CANCELAMENTO_NAO_PERMITIDO',
-        details: [{ code: 'ORDEM_CANCELAMENTO_NAO_PERMITIDO', description: exception.message }],
-      };
-    }
-
-    if (exception instanceof OrdemServicoAcessoNegadoException) {
-      return {
-        status: HttpStatus.FORBIDDEN,
-        message: 'Acesso negado a esta ordem de serviço.',
-        error: 'ORDEM_ACESSO_NEGADO',
-        details: [{ code: 'ORDEM_ACESSO_NEGADO', description: exception.message }],
-      };
+      return this.buildResponse(HttpStatus.BAD_REQUEST, exception.message);
     }
 
     if (exception instanceof HttpException) {
+      const status = exception.getStatus();
+      if (status === 400) {
+        const response = exception.getResponse();
+        if (
+          typeof response === 'object' &&
+          response !== null &&
+          ('message' in response || 'errors' in response)
+        ) {
+          return this.handleValidationException(exception);
+        }
+      }
       return this.handleHttpException(exception);
     }
 
-    return this.handleUnknown(exception);
+    return this.buildResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      'Erro interno no servidor.',
+    );
   }
 }

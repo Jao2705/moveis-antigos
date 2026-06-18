@@ -1,0 +1,57 @@
+<div class="grid gap-6 lg:grid-cols-[1.5fr_0.85fr]">
+  <ui-card tone="glass" class="overflow-hidden">
+    <div class="relative">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(217,119,6,0.18),_transparent_35%)]"></div>
+      <div class="relative flex min-h-[320px] flex-col justify-between gap-8">
+        <div class="space-y-6">
+          <div class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-amber-800">
+            {{ auth.isAdmin() ? 'Modo administrador' : 'Acesso do usuário' }}
+          </div>
+          <div class="space-y-3">
+            <h1 class="max-w-2xl text-4xl font-black tracking-tight text-stone-950 sm:text-5xl">
+              Bem-vindo, {{ auth.user()?.nome || 'artesão' }}.
+            </h1>
+            <p class="max-w-2xl text-base leading-7 text-stone-600 sm:text-lg">
+              {{ auth.isAdmin()
+                ? 'Gerencie os ateliês, valide cadastros e acompanhe a operação com acesso total.'
+                : 'Abra o painel dos ateliês para visualizar os móveis vinculados e acompanhar o andamento das restaurações.' }}
+            </p>
+          </div>
+        </div>
+
+        @if (auth.isAdmin()) {
+          <a routerLink="/atelie/novo" ui-button variant="secondary" class="self-start">Novo ateliê</a>
+        }
+      </div>
+    </div>
+  </ui-card>
+
+  <div class="grid gap-4">
+    <ui-card tone="muted">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Perfil</p>
+      <p class="mt-2 text-2xl font-bold text-stone-950">{{ auth.user()?.role === 'admin' ? 'Administrador' : 'Usuário' }}</p>
+      <p class="mt-1 text-sm text-stone-600">Acesso autenticado para a conta {{ auth.user()?.email }}</p>
+    </ui-card>
+    <ui-card>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Atalho principal</p>
+      <div class="mt-4 rounded-[1.4rem] border border-amber-100 bg-gradient-to-br from-amber-50 to-white px-4 py-5 shadow-[0_18px_45px_-30px_rgba(180,83,9,0.45)]">
+        <p class="text-sm leading-6 text-stone-600">
+          {{ auth.isAdmin()
+            ? 'A operação administrativa fica concentrada em um caminho único de acesso aos ateliês.'
+            : 'Abertura direta da lista de ateliês liberados para a sua conta.' }}
+        </p>
+        <div class="mt-4">
+          @if (auth.isAdmin()) {
+            <a routerLink="/atelie" class="inline-flex w-full items-center justify-center rounded-2xl bg-amber-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-800">
+              Gerenciar ateliês
+            </a>
+          } @else {
+            <a routerLink="/atelie" class="inline-flex w-full items-center justify-center rounded-2xl bg-amber-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-amber-800">
+              Abrir ateliês
+            </a>
+          }
+        </div>
+      </div>
+    </ui-card>
+  </div>
+</div>

@@ -23,8 +23,8 @@ let MovelService = class MovelService {
         this.movelRepo = movelRepo;
         this.atelieRepo = atelieRepo;
     }
-    async create(tipoMovel, dataInicioTrab, restaurado, horasHomem, atelieId) {
-        const movel = new movel_1.Movel(null, tipoMovel?.trim(), new Date(dataInicioTrab), restaurado, horasHomem, atelieId);
+    async create(tipoMovel, dataInicioTrab, restaurado, horasHomem, atelieId, ownerUserId) {
+        const movel = new movel_1.Movel(null, tipoMovel?.trim(), new Date(dataInicioTrab), restaurado, horasHomem, atelieId, ownerUserId);
         await this.validarRegrasNegocio(movel);
         return this.movelRepo.create(movel);
     }
@@ -38,22 +38,32 @@ let MovelService = class MovelService {
     async findAll() {
         return this.movelRepo.findAll();
     }
-    async update(id, restaurado, horasHomem) {
+    async update(id, restaurado, horasHomem, requester) {
         const movel = await this.movelRepo.findById(id);
         if (!movel) {
             throw new movel_exceptions_1.MovelNotFoundException(id);
         }
+        this.validarPermissaoDeAcesso(movel, requester);
         movel.restaurado = restaurado;
         movel.horasHomem = horasHomem;
         await this.validarRegrasNegocio(movel, id);
         return this.movelRepo.update(movel);
     }
-    async delete(id) {
+    async delete(id, requester) {
         const movel = await this.movelRepo.findById(id);
         if (!movel) {
             throw new movel_exceptions_1.MovelNotFoundException(id);
         }
+        this.validarPermissaoDeAcesso(movel, requester);
         return this.movelRepo.delete(id);
+    }
+    validarPermissaoDeAcesso(movel, requester) {
+        if (requester.role === 'admin') {
+            return;
+        }
+        if (movel.ownerUserId !== requester.id) {
+            throw new common_1.ForbiddenException('Você só pode editar ou remover móveis cadastrados por você.');
+        }
     }
     async validarRegrasNegocio(movel, ignoreId) {
         if (!movel.tipoMovel || movel.tipoMovel === '') {

@@ -13,7 +13,7 @@ export class AtelieService {
   constructor(
     @Inject('AtelieRepositoryPort')
     private readonly atelieRepo: AtelieRepositoryPort,
-  ) {}
+  ) { }
 
   async create(
     especialidadeEra: string,
