@@ -429,7 +429,7 @@ exports.DataException = void 0;
 class DataException extends Error {
     getResponse;
     constructor(data) {
-        super(`A data ${data.toISOString()} é inválida`);
+        super(`A data de fundação não pode ser futura.`);
     }
 }
 exports.DataException = DataException;
