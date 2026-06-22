@@ -1,0 +1,104 @@
+<ui-card tone="glass">
+  <div class="space-y-6">
+    @if (atelie()) {
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Ateliê selecionado</p>
+          <h1 class="text-3xl font-black text-foreground">{{ atelie()!.especialidadeEra }}</h1>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Fundado em {{ atelie()!.dataFundacao | date:'dd/MM/yyyy' }} · Área {{ atelie()!.areaOficinaM2 }} m²
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          @if (auth.isAuthenticated()) {
+            <a [routerLink]="['/atelie', atelie()!.id, 'moveis', 'novo']" ui-button>Novo móvel</a>
+          }
+          <a routerLink="/atelie" ui-button variant="ghost">Voltar aos ateliês</a>
+        </div>
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+        {{ errorMessage() }}
+      </div>
+    }
+    @if (actionMessage()) {
+      <div class="rounded-2xl border border-success/20 bg-success/8 px-4 py-3 text-sm text-success">
+        {{ actionMessage() }}
+      </div>
+    }
+
+    @if (loading()) {
+      <p class="text-sm text-muted-foreground">Carregando móveis do ateliê...</p>
+    } @else if (items().length === 0) {
+      <p class="rounded-2xl border border-dashed border-border bg-muted px-4 py-8 text-center text-sm text-muted-foreground">
+        Nenhum móvel cadastrado para este ateliê.
+      </p>
+    } @else {
+      <div class="grid gap-4 xl:grid-cols-2">
+        @for (item of items(); track item.id) {
+          <article class="rounded-3xl border border-border bg-card p-6 shadow-[0_18px_40px_-28px_rgba(68,45,15,0.18)]">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">Móvel #{{ item.id }}</p>
+                <h2 class="mt-2 text-2xl font-bold text-foreground">{{ item.tipoMovel }}</h2>
+              </div>
+              <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                {{ item.restaurado ? 'Restaurado' : 'Em andamento' }}
+              </span>
+            </div>
+
+            <dl class="mt-5 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+              <div class="rounded-2xl bg-muted p-4">
+                <dt class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Início</dt>
+                <dd class="mt-2 font-medium text-foreground">{{ item.dataInicioTrab | date:'dd/MM/yyyy' }}</dd>
+              </div>
+              <div class="rounded-2xl bg-muted p-4">
+                <dt class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Responsável</dt>
+                <dd class="mt-2 font-medium text-foreground">
+                  {{ item.ownerUserId ? ('Usuário #' + item.ownerUserId) : 'Sem vínculo' }}
+                </dd>
+              </div>
+              <div class="rounded-2xl bg-muted p-4 sm:col-span-2">
+                <dt class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Horas-homem</dt>
+                <dd class="mt-2 font-medium text-foreground">{{ item.horasHomem }} h</dd>
+              </div>
+            </dl>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              @if (canManage(item)) {
+                <a [routerLink]="['/atelie', atelie()!.id, 'moveis', 'editar', item.id]" ui-button variant="secondary">Editar</a>
+                <button type="button" ui-button variant="ghost" (click)="confirmDelete(item)">Excluir</button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</ui-card>
+
+@if (deleteTarget()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 px-4 backdrop-blur-sm">
+    <div class="w-full max-w-lg rounded-[2rem] border border-border bg-card p-6 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.28)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Confirmar exclusão</p>
+      <h2 class="mt-2 text-2xl font-bold text-foreground">{{ deleteTarget()?.tipoMovel }}</h2>
+      <p class="mt-3 text-sm leading-6 text-muted-foreground">
+        A remoção encerra o vínculo deste móvel com o ateliê selecionado.
+      </p>
+
+      @if (deleteError()) {
+        <div class="mt-4 rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+          {{ deleteError() }}
+        </div>
+      }
+
+      <div class="mt-6 flex flex-wrap justify-end gap-3">
+        <button type="button" ui-button variant="ghost" (click)="deleteTarget.set(null)">Cancelar</button>
+        <button type="button" ui-button (click)="deleteConfirmed()">Excluir agora</button>
+      </div>
+    </div>
+  </div>
+}

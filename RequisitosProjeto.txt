@@ -30,3 +30,9 @@ VALIDAÇÕES DE NEGÓCIO (mínimo 7 no service):
 [Regra Negócio] Se restaurado for true, o horasHomem deve ser maior ou igual a 40. Se restaurado for false, o horasHomem pode ser qualquer valor dentro do range, mas não pode ser 0. Lançar BadRequestException se houver inconsistência.
 
 [Regra Negócio] Não permitir que um mesmo atelieId tenha dois ProjetoMovel com o mesmo tipoMovel e restaurado = false (evitar duplicidade de móveis em restauração). Lançar ConflictException.
+
+
+
+
+Validar lista de moveis e não aceitar apenas caracteres quando for cadastrar um movel ou atelie
+

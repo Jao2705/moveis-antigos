@@ -1,0 +1,86 @@
+<ui-card tone="glass">
+  <div class="space-y-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+          {{ isEdit() ? 'Editar ateliê' : 'Novo ateliê' }}
+        </p>
+        <h1 class="text-3xl font-black text-foreground">{{ isEdit() ? 'Ajustar cadastro' : 'Cadastrar ateliê' }}</h1>
+      </div>
+      <a routerLink="/atelie" ui-button variant="ghost">Voltar</a>
+    </div>
+
+    @if (loadingData()) {
+      <p class="text-sm text-muted-foreground">Carregando dados do ateliê...</p>
+    }
+    @if (errorMessage()) {
+      <div class="rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+        {{ errorMessage() }}
+      </div>
+    }
+    @if (successMessage()) {
+      <div class="rounded-2xl border border-success/20 bg-success/8 px-4 py-3 text-sm text-success">
+        {{ successMessage() }}
+      </div>
+    }
+
+    <form class="grid gap-5 lg:grid-cols-2" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="block space-y-2 lg:col-span-2">
+        <span class="text-sm font-medium text-foreground/80">Especialidade / Era</span>
+        <input
+          formControlName="especialidadeEra"
+          type="text"
+          class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/12 disabled:bg-muted"
+          [readonly]="isEdit()"
+          placeholder="Ex: Restauração Art Déco"
+        />
+        @if (fieldError('especialidadeEra')) {
+          <span class="text-sm text-destructive">{{ fieldError('especialidadeEra') }}</span>
+        }
+      </label>
+
+      <label class="block space-y-2">
+        <span class="text-sm font-medium text-foreground/80">Data de fundação</span>
+        <input
+          formControlName="dataFundacao"
+          type="date"
+          class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/12 disabled:bg-muted"
+          [readonly]="isEdit()"
+        />
+        @if (fieldError('dataFundacao')) {
+          <span class="text-sm text-destructive">{{ fieldError('dataFundacao') }}</span>
+        }
+      </label>
+
+      <label class="block space-y-2">
+        <span class="text-sm font-medium text-foreground/80">Área da oficina (m²)</span>
+        <input
+          formControlName="areaOficinaM2"
+          type="number"
+          min="40"
+          class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/12"
+        />
+        @if (fieldError('areaOficinaM2')) {
+          <span class="text-sm text-destructive">{{ fieldError('areaOficinaM2') }}</span>
+        }
+      </label>
+
+      <label class="flex items-center gap-3 rounded-2xl border border-border bg-muted px-4 py-4 lg:col-span-2">
+        <input
+          formControlName="equipadoCompleto"
+          type="checkbox"
+          class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+        />
+        <span>
+          <span class="block font-medium text-foreground">Equipado completamente</span>
+          <span class="block text-sm text-muted-foreground">Marque quando o espaço estiver pronto para operação total.</span>
+        </span>
+      </label>
+
+      <div class="flex flex-wrap gap-3 lg:col-span-2">
+        <button type="submit" ui-button [disabled]="submitting()">Salvar</button>
+        <a routerLink="/atelie" ui-button variant="ghost">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</ui-card>

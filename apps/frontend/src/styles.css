@@ -1,0 +1,138 @@
+@import "tailwindcss";
+@source "./app/**/*.{html,ts}";
+
+@theme {
+  /* === PALETA WALNUT / LINHO === */
+  --color-walnut-50: oklch(97.5% 0.008 60);
+  --color-walnut-100: oklch(94.5% 0.01 60);
+  --color-walnut-200: oklch(89% 0.015 60);
+  --color-walnut-300: oklch(81% 0.022 60);
+  --color-walnut-400: oklch(72% 0.03 60);
+  --color-walnut-500: oklch(62% 0.035 60);
+  --color-walnut-600: oklch(52% 0.038 60);
+  --color-walnut-700: oklch(44% 0.04 60);
+  --color-walnut-800: oklch(38% 0.04 60);
+  --color-walnut-900: oklch(30% 0.032 60);
+  --color-walnut-950: oklch(22% 0.024 60);
+
+  /* === TOKENS SEMÂNTICOS (Light) === */
+  --color-primary: var(--color-walnut-800);
+  --color-primary-hover: var(--color-walnut-900);
+  --color-primary-foreground: oklch(98.5% 0.003 60);
+
+  --color-background: oklch(98.5% 0.004 60);
+  --color-foreground: oklch(22% 0.016 60);
+
+  --color-surface: oklch(100% 0 0);
+  --color-surface-foreground: oklch(22% 0.016 60);
+
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-surface-foreground);
+
+  --color-muted: oklch(96.5% 0.003 60);
+  --color-muted-foreground: oklch(47% 0.018 60);
+
+  --color-border: oklch(92.5% 0.003 60);
+  --color-ring: var(--color-primary);
+
+  --color-success: oklch(58% 0.14 145);
+  --color-success-foreground: oklch(98.5% 0.003 60);
+
+  --color-warning: oklch(76% 0.12 75);
+  --color-warning-foreground: oklch(25% 0.02 65);
+
+  --color-destructive: oklch(54% 0.18 27);
+  --color-destructive-foreground: oklch(98.5% 0.003 60);
+
+  --color-info: oklch(58% 0.12 250);
+  --color-info-foreground: oklch(98.5% 0.003 60);
+
+  /* === RADIUS === */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* === SOMBRAS === */
+  --shadow-card: 0 1px 3px oklch(0% 0 0 / 0.08), 0 1px 2px oklch(0% 0 0 / 0.04);
+  --shadow-elevated: 0 4px 12px oklch(0% 0 0 / 0.1), 0 2px 4px oklch(0% 0 0 / 0.06);
+
+  /* === ANIMAÇÕES === */
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+  --animate-slide-left: slide-left 0.25s ease-out;
+  --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-left {
+    from {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(2rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --color-background: oklch(16% 0.012 60);
+  --color-foreground: oklch(94% 0.008 60);
+
+  --color-surface: oklch(20% 0.014 60);
+  --color-surface-foreground: oklch(94% 0.008 60);
+
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-surface-foreground);
+
+  --color-muted: oklch(24% 0.012 60);
+  --color-muted-foreground: oklch(70% 0.01 60);
+
+  --color-border: oklch(30% 0.01 60);
+  --color-ring: oklch(72% 0.03 60);
+
+  --color-primary: oklch(72% 0.03 60);
+  --color-primary-hover: oklch(78% 0.028 60);
+  --color-primary-foreground: oklch(18% 0.012 60);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-200 selection:bg-primary/25 selection:text-primary;
+  }
+}
