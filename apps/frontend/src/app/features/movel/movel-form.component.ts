@@ -134,6 +134,27 @@ export class MovelFormComponent implements OnInit {
     return 'Valor inválido.';
   }
 
+  hoursHomemBusinessError(): string | null {
+    const backendRuleError =
+      this.fieldErrors()['horasHomem'] ?? this.fieldErrors()['restaurado'];
+    if (backendRuleError) {
+      return this.resolveHorasHomemRuleMessage();
+    }
+
+    const horasHomem = this.form.controls.horasHomem.value;
+    const restaurado = this.form.controls.restaurado.value;
+
+    if (restaurado && horasHomem < 40) {
+      return 'Quando o móvel estiver como restaurado, as horas-homem precisam ser de pelo menos 40.';
+    }
+
+    if (!restaurado && horasHomem === 0) {
+      return 'Se o móvel ainda não estiver restaurado, as horas-homem não podem ser zero.';
+    }
+
+    return null;
+  }
+
   submit(): void {
     this.errorMessage.set(null);
     this.successMessage.set(null);
@@ -209,6 +230,21 @@ export class MovelFormComponent implements OnInit {
     }
 
     return 'Valor inválido.';
+  }
+
+  private resolveHorasHomemRuleMessage(): string {
+    const horasHomem = this.form.controls.horasHomem.value;
+    const restaurado = this.form.controls.restaurado.value;
+
+    if (restaurado && horasHomem < 40) {
+      return 'Quando o móvel estiver como restaurado, as horas-homem precisam ser de pelo menos 40.';
+    }
+
+    if (!restaurado && horasHomem === 0) {
+      return 'Se o móvel ainda não estiver restaurado, as horas-homem não podem ser zero.';
+    }
+
+    return 'A combinação de restaurado e horas-homem está inconsistente.';
   }
 }
 

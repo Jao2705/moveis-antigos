@@ -69,6 +69,9 @@
         @if (fieldError('horasHomem')) {
           <span class="text-sm text-destructive">{{ fieldError('horasHomem') }}</span>
         }
+        @if (hoursHomemBusinessError()) {
+          <span class="text-sm text-destructive">{{ hoursHomemBusinessError() }}</span>
+        }
       </label>
 
       <label class="flex items-center gap-3 rounded-2xl border border-border bg-muted px-4 py-4 lg:col-span-2">
