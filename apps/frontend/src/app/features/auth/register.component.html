@@ -1,0 +1,83 @@
+<div class="mx-auto max-w-5xl py-8">
+  <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+    <ui-card tone="glass">
+      <form class="space-y-5" (ngSubmit)="submit()" [formGroup]="form">
+        <div class="space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Cadastro</p>
+          <h1 class="text-2xl font-bold text-foreground">Abrir acesso para a equipe</h1>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+            {{ errorMessage() }}
+          </div>
+        }
+        @if (successMessage()) {
+          <div class="rounded-2xl border border-success/20 bg-success/8 px-4 py-3 text-sm text-success">
+            {{ successMessage() }}
+          </div>
+        }
+
+        <label class="block space-y-2">
+          <span class="text-sm font-medium text-foreground/80">Nome</span>
+          <input
+            formControlName="nome"
+            type="text"
+            class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/80 focus:border-primary focus:ring-4 focus:ring-primary/12"
+            placeholder="Nome completo"
+          />
+          @if (fieldError('nome')) {
+            <span class="text-sm text-destructive">{{ fieldError('nome') }}</span>
+          }
+        </label>
+
+        <label class="block space-y-2">
+          <span class="text-sm font-medium text-foreground/80">E-mail</span>
+          <input
+            formControlName="email"
+            type="email"
+            class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/80 focus:border-primary focus:ring-4 focus:ring-primary/12"
+            placeholder="voce@oficina.com"
+          />
+          @if (fieldError('email')) {
+            <span class="text-sm text-destructive">{{ fieldError('email') }}</span>
+          }
+        </label>
+
+        <label class="block space-y-2">
+          <span class="text-sm font-medium text-foreground/80">Senha</span>
+          <input
+            formControlName="senha"
+            type="password"
+            class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/80 focus:border-primary focus:ring-4 focus:ring-primary/12"
+            placeholder="Mínimo de 6 caracteres"
+          />
+          @if (fieldError('senha')) {
+            <span class="text-sm text-destructive">{{ fieldError('senha') }}</span>
+          }
+        </label>
+
+        <div class="flex flex-wrap gap-3">
+          <button type="submit" ui-button [disabled]="loading()">Cadastrar</button>
+          <a routerLink="/login" ui-button variant="ghost">Já tenho conta</a>
+        </div>
+      </form>
+    </ui-card>
+
+    <section class="rounded-[2rem] border border-border bg-[linear-gradient(160deg,_rgba(251,249,244,0.98),_rgba(230,221,209,0.95),_rgba(198,182,166,0.72))] p-8 shadow-[0_30px_80px_-40px_rgba(68,45,15,0.25)]">
+      <p class="text-xs uppercase tracking-[0.45em] text-primary/70">Equipe</p>
+      <h2 class="mt-3 text-4xl font-black tracking-tight text-foreground">Convidar membros com segurança.</h2>
+      <p class="mt-4 max-w-xl text-sm leading-7 text-muted-foreground">
+        O novo usuário entra com perfil padrão e pode ser ativado depois pela área administrativa.
+      </p>
+      <div class="mt-8 grid gap-3">
+        <div class="rounded-2xl border border-border bg-card/80 p-4 text-sm text-foreground/80">
+          Fluxo simples para receber novos operadores e artesãos.
+        </div>
+        <div class="rounded-2xl border border-border bg-card/80 p-4 text-sm text-foreground/80">
+          Mensagens de erro retornadas pela API aparecem ao lado do formulário.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

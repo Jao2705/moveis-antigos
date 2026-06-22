@@ -1,0 +1,72 @@
+<div class="mx-auto max-w-5xl py-8">
+  <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+    <section
+      class="space-y-6 rounded-[2rem] border border-border bg-[linear-gradient(160deg,_rgba(56,39,22,0.97),_rgba(112,84,58,0.92),_rgba(214,202,187,0.82))] p-8 text-primary-foreground shadow-[0_30px_80px_-40px_rgba(56,39,22,0.8)]">
+      <p class="text-xs uppercase tracking-[0.45em] text-white/70">Acesso</p>
+      <h1 class="max-w-md text-4xl font-black tracking-tight sm:text-5xl">Entre no painel da oficina.</h1>
+      <p class="max-w-lg text-sm leading-7 text-white/85 sm:text-base">
+        Acesse ateliês, acompanhe restaurações e mantenha a operação organizada em poucos cliques.
+      </p>
+
+      <div class="grid gap-3 text-sm text-white/85">
+        <div class="rounded-2xl border border-white/12 bg-white/10 p-4">
+          Autenticação com proteção de sessão e redirecionamento automático.
+        </div>
+        <div class="rounded-2xl border border-white/12 bg-white/10 p-4">
+          Layout responsivo para uso em bancada, tablet e desktop.
+        </div>
+      </div>
+    </section>
+
+    <ui-card tone="glass">
+      <form class="space-y-5" (ngSubmit)="submit()" [formGroup]="form">
+        <div class="space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Login</p>
+          <h2 class="text-2xl font-bold text-foreground">Bem-vindo</h2>
+        </div>
+
+        @if (infoMessage()) {
+          <div class="rounded-2xl border border-primary/15 bg-primary/8 px-4 py-3 text-sm text-primary">
+            {{ infoMessage() }}
+          </div>
+        }
+        @if (errorMessage()) {
+          <div class="rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <label class="block space-y-2">
+          <span class="text-sm font-medium text-foreground/80">E-mail</span>
+          <input
+            formControlName="email"
+            type="email"
+            class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/80 focus:border-primary focus:ring-4 focus:ring-primary/12"
+            placeholder="voce@oficina.com"
+          />
+          @if (fieldError('email')) {
+            <span class="text-sm text-destructive">{{ fieldError('email') }}</span>
+          }
+        </label>
+
+        <label class="block space-y-2">
+          <span class="text-sm font-medium text-foreground/80">Senha</span>
+          <input
+            formControlName="senha"
+            type="password"
+            class="w-full rounded-2xl border border-border bg-surface px-4 py-3 text-foreground outline-none transition placeholder:text-muted-foreground/80 focus:border-primary focus:ring-4 focus:ring-primary/12"
+            placeholder="••••••••"
+          />
+          @if (fieldError('senha')) {
+            <span class="text-sm text-destructive">{{ fieldError('senha') }}</span>
+          }
+        </label>
+
+        <div class="flex flex-wrap gap-3">
+          <button type="submit" ui-button [disabled]="loading()">Entrar</button>
+          <a routerLink="/register" ui-button variant="ghost">Criar conta</a>
+        </div>
+      </form>
+    </ui-card>
+  </div>
+</div>

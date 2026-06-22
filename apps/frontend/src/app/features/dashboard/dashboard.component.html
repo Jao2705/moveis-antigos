@@ -1,0 +1,57 @@
+<div class="grid gap-6 lg:grid-cols-[1.5fr_0.85fr]">
+  <ui-card tone="glass" class="overflow-hidden border-border/20 bg-white/45 shadow-[0_18px_50px_-32px_rgba(68,45,15,0.14)]">
+    <div class="relative">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(85,61,38,0.08),_transparent_32%),radial-gradient(circle_at_bottom_left,_rgba(155,133,110,0.08),_transparent_30%)]"></div>
+      <div class="relative flex min-h-[320px] flex-col justify-between gap-10 px-2 py-1">
+        <div class="space-y-6">
+          <div class="inline-flex items-center rounded-full border border-border bg-card/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+            {{ auth.isAdmin() ? 'Modo administrador' : 'Acesso do usuário' }}
+          </div>
+          <div class="space-y-3">
+            <h1 class="max-w-2xl text-4xl font-black tracking-tight text-foreground sm:text-5xl">
+              Bem-vindo, {{ auth.user()?.nome || 'artesão' }}.
+            </h1>
+            <p class="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+              {{ auth.isAdmin()
+                ? 'Gerencie os ateliês, valide cadastros e acompanhe a operação com acesso total.'
+                : 'Abra o painel dos ateliês para visualizar os móveis vinculados e acompanhar o andamento das restaurações.' }}
+            </p>
+          </div>
+        </div>
+
+        @if (auth.isAdmin()) {
+          <a routerLink="/atelie/novo" ui-button variant="secondary" class="mt-8 self-start">Novo ateliê</a>
+        }
+      </div>
+    </div>
+  </ui-card>
+
+  <div class="grid gap-4">
+    <ui-card tone="muted">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">Perfil</p>
+      <p class="mt-2 text-2xl font-bold text-foreground">{{ auth.user()?.role === 'admin' ? 'Administrador' : 'Usuário' }}</p>
+      <p class="mt-1 text-sm text-muted-foreground">Acesso autenticado para a conta {{ auth.user()?.email }}</p>
+    </ui-card>
+    <ui-card>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">Atalho principal</p>
+      <div class="mt-4 rounded-[1.4rem] border border-border bg-[linear-gradient(180deg,_rgba(255,255,255,0.95),_rgba(240,235,228,0.95))] px-4 py-5 shadow-[0_18px_45px_-30px_rgba(68,45,15,0.25)]">
+        <p class="text-sm leading-6 text-muted-foreground">
+          {{ auth.isAdmin()
+            ? 'A operação administrativa fica concentrada em um caminho único de acesso aos ateliês.'
+            : 'Abertura direta da lista de ateliês liberados para a sua conta.' }}
+        </p>
+        <div class="mt-4">
+          @if (auth.isAdmin()) {
+            <a routerLink="/atelie" class="inline-flex w-full items-center justify-center rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover">
+              Gerenciar ateliês
+            </a>
+          } @else {
+            <a routerLink="/atelie" class="inline-flex w-full items-center justify-center rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover">
+              Abrir ateliês
+            </a>
+          }
+        </div>
+      </div>
+    </ui-card>
+  </div>
+</div>

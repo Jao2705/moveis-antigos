@@ -2,6 +2,9 @@
 
 Este arquivo define as **Skills** e **Rules** que devem ser rigorosamente seguidas por qualquer agente de Inteligência Artificial (como o Antigravity) atuando neste monorepo. O objetivo é manter o padrão de código, a arquitetura e a consistência técnica do projeto de ponta a ponta.
 
+## 🏢 Contexto de Negócio (Ateliês e Móveis Antigos)
+Este projeto é um sistema de gerenciamento para **Ateliês e Móveis Antigos**. Os agentes devem levar em consideração entidades relacionadas a este universo, como Móveis (peças de antiquário, restaurações, histórico de móveis), Ateliês (dados do ateliê, marceneiros, restauradores), Clientes e Orçamentos. Todas as lógicas de backend, DTOs e telas de frontend devem adotar terminologias consistentes com o gerenciamento de um ateliê de restauração e venda de móveis antigos.
+
 Antes de propor qualquer modificação ou iniciar uma implementação estrutural, o agente DEVE consultar o documento de [Especificação Arquitetural](specs/arquitetura.md) assim como as regras e os fluxos descritos na pasta `.agents`.
 
 ## 📚 Rules (Regras do Projeto)

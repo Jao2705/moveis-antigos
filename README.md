@@ -1,149 +1,173 @@
-# moveisantigosv2
+# moveisantigosv2 - Monorepo
 
-API RESTful desenvolvida com NestJS + TypeORM + SQLite para o tema:
-**Estudio de Restauracao de Moveis Antigos**.
+Sistema academico de gerenciamento de **Atelies de Restauracao de Moveis Antigos**, com backend NestJS 11 e frontend Angular 20.
+
+## Estrutura
+
+```text
+moveisantigosv2/
+├── apps/
+│   ├── backend/     # NestJS 11 + TypeORM + SQLite
+│   └── frontend/    # Angular 20 Standalone
+├── packages/
+│   ├── utils/               # Tipos compartilhados
+│   ├── typescript-config/   # tsconfig base
+│   └── eslint-config/       # ESLint compartilhado
+├── specs/           # Documentacao tecnica
+├── turbo.json
+├── pnpm-workspace.yaml
+└── package.json
+```
 
 ## Integrantes
+
 - Joao Vitor Freitas Araujo
 - Alex Henrique Borges Alexandre
 
-## Tecnologias
-- NestJS
-- TypeORM
-- SQLite
-- Swagger
+## Como executar
 
-## Tema e Entidades
-
-### Entidade Pai: AtelieRestauracao
-- `id` (number)
-- `especialidadeEra` (string)
-- `dataFundacao` (date)
-- `equipadoCompleto` (boolean)
-- `areaOficinaM2` (number)
-
-### Entidade Filho: ProjetoMovel
-- `id` (number)
-- `tipoMovel` (string)
-- `dataInicioTrab` (date)
-- `restaurado` (boolean)
-- `horasHomem` (number)
-- `atelieId` (FK)
-
-Relacionamento: **1:N**  
-Um `Atelie` possui varios `Moveis`.
-
-## Arquitetura Hexagonal (Ports and Adapters)
-
-Estrutura principal:
-
-```text
-src/
-  atelie/
-    domain/
-    application/
-      ports/
-    infraestructure/presistence/typeorm/
-    presentation/
-  movel/
-    domain/
-    application/
-      ports/
-    infraestructure/presistence/typeorm/
-    presentation/
-  shared/
-    database/
-    filters/
+```bash
+pnpm install
+pnpm dev
 ```
 
-- `domain`: entidades e excecoes de dominio
-- `application`: services e portas (interfaces de repositorio)
-- `infrastructure`: adapters TypeORM (entities ORM e repositories)
-- `presentation`: controllers e DTOs
-- `shared`: configuracao de banco e filtros globais
+Backend: `http://localhost:3000`
+Frontend: `http://localhost:4200`
+Swagger: `http://localhost:3000/swagger-ui`
 
-## Regras de Negocio Implementadas
+## Variaveis de ambiente
 
-As validacoes estao na camada de service e usam excecoes:
-- `BadRequestException`
-- `NotFoundException`
-- `ConflictException`
+O arquivo `.env.example` esta na raiz do monorepo e documenta as variaveis usadas pelo backend.
 
-Validacoes principais:
-1. Campos obrigatorios do atelie.
-2. `dataFundacao` nao pode ser futura.
-3. `areaOficinaM2` deve ser >= 50.
-4. Campos obrigatorios do movel.
-5. `atelieId` deve existir antes de criar/atualizar movel.
-6. `dataInicioTrab` nao pode ser anterior a `dataFundacao` do atelie.
-7. `horasHomem` deve estar entre 10 e 1000.
-8. Se `restaurado = true`, `horasHomem >= 40`.
-9. Se `restaurado = false`, nao permitir `horasHomem = 0`.
-10. Nao permitir duplicidade de `tipoMovel` em restauracao (`restaurado = false`) no mesmo atelie.
+Para o frontend, a URL da API esta configurada em `apps/frontend/src/environments/environment.ts`.
 
-## Filtro Global de Excecoes
+### Credenciais padrao do administrador
 
-Filtro configurado no `main.ts`:
-- `AllExceptionsFilter`
+Copie o `.env.example` da raiz para `apps/backend/.env` e ajuste, se necessario:
 
-Formato padrao de resposta de erro:
+- E-mail: `admin@moveisantigos.com`
+- Senha: `admin123`
 
-```json
+## Endpoints principais da API
+
+### Auth
+
+```bash
+POST /auth/register
+Content-Type: application/json
+
 {
-  "statusCode": 400,
-  "message": "mensagem de erro",
-  "timestamp": "2026-04-04T00:00:00.000Z"
+  "nome": "Maria Silva",
+  "email": "maria@exemplo.com",
+  "senha": "123456"
 }
 ```
 
-## Banco de Dados
-- Tipo: SQLite
-- Arquivo: `data/moveis-antigos.db`
-- `synchronize: true` habilitado para desenvolvimento
-
-## Endpoints Principais
-
-### Atelie
-- `POST /atelie`
-- `GET /atelie`
-- `GET /atelie/:id`
-- `PUT /atelie/:id`
-- `DELETE /atelie/:id`
-- `GET /atelie/:id/com-moveis` (pai + filhos com relations)
-
-### Movel
-- `POST /movel`
-- `GET /movel`
-- `GET /movel/:id`
-- `PUT /movel/:id`
-- `DELETE /movel/:id`
-
-## Como Executar
-
 ```bash
-npm install
-npm run build
-npm run start:dev
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "maria@exemplo.com",
+  "senha": "123456"
+}
 ```
 
-## Divisão de tarefas
+### Atelie
 
-- João Vitor: Ficou responsável por fazer a parte de Ateliê.
-- Alex: Ficou responsável por fazer a parte de Móvel e criar a relação 1:N entre as entidades.
-- Os testes foram realizados em conjunto. Os resultados foram tiveram resultados positivos de acordo com as regras de negócio solicitadas.
+```bash
+GET /atelie
+Authorization: Bearer <token>
+```
 
-API local:
-- `http://localhost:3000`
+```bash
+POST /atelie
+Authorization: Bearer <token>
+Content-Type: application/json
 
-Swagger:
-- `http://localhost:3000/swagger-ui`
+{
+  "especialidadeEra": "Art Deco",
+  "dataFundacao": "2020-01-10",
+  "equipadoCompleto": true,
+  "areaOficinaM2": 80
+}
+```
+
+```bash
+PUT /atelie/1
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "equipadoCompleto": false,
+  "areaOficinaM2": 60
+}
+```
+
+### Movel
+
+```bash
+GET /movel
+Authorization: Bearer <token>
+```
+
+```bash
+POST /movel
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "tipoMovel": "Mesa de jantar vitoriana",
+  "dataInicioTrab": "2024-02-01",
+  "restaurado": false,
+  "horasHomem": 40,
+  "atelieId": 1
+}
+```
+
+```bash
+DELETE /movel/1
+Authorization: Bearer <token>
+```
+
+### Users
+
+```bash
+GET /users
+Authorization: Bearer <token>
+```
+
+```bash
+PATCH /users/1/activate
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "ativo": true
+}
+```
+
+## Funcionalidades
+
+### Backend
+
+- CRUD de Atelie (entidade pai) e Movel (entidade filho)
+- Autenticacao JWT (`POST /auth/login`, `POST /auth/register`)
+- Usuarios com campo `ativo` (cadastro aguarda liberacao do admin)
+- Guards JWT + roles em todas as rotas de negocio
+- Filtro global de excecoes com `{ statusCode, message, timestamp, errors? }`
+- Seed automatico do administrador inicial
+
+### Frontend
+
+- Login, cadastro, dashboard protegido
+- CRUD de atelies e moveis
+- Gestao de usuarios (`/admin/users`)
+- JWT em memoria (Signals), interceptor HTTP, AuthGuard
+- TailwindCSS, Reactive Forms, lazy loading por feature
 
 ## Testes
 
 ```bash
-npm run test
+pnpm test
 ```
-
-## Observacao
-
-Projeto academico para fins de estudo e avaliacao da disciplina.
