@@ -28,7 +28,8 @@
     <form class="grid gap-5 lg:grid-cols-2" [formGroup]="form" (ngSubmit)="submit()">
       <label class="block space-y-2 lg:col-span-2">
         <span class="text-sm font-medium text-stone-700">Tipo do móvel</span>
-        <input formControlName="tipoMovel" type="text" class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-900 outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100 disabled:bg-stone-100" [readonly]="isEdit()" placeholder="Ex: Cadeira Luiz XV" />
+        <input formControlName="tipoMovel" type="text" class="w-full rounded-2xl border border-stone-200 bg-white px-4 py-3 text-stone-900 outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100 disabled:bg-stone-100" [readonly]="isEdit()" placeholder="Ex: Sofá, Mesa de centro ou Cama" />
+        <p class="text-xs leading-5 text-stone-500">Informe um nome que contenha um tipo comum de móvel. Caracteres especiais isolados não são aceitos.</p>
         @if (fieldError('tipoMovel')) {
           <span class="text-sm text-red-600">{{ fieldError('tipoMovel') }}</span>
         }

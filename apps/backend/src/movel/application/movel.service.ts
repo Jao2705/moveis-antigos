@@ -1,4 +1,5 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { commonMovelTypeExamples, isCommonMovelType } from '@moveisantigos/utils';
 import type { AtelieRepositoryPort } from 'src/atelie/application/ports/atelie.repository.port';
 import { Movel } from '../domain/movel';
 import {
@@ -12,6 +13,7 @@ import {
   MovelNotFoundException,
   MovelRestauradoInconsistenteException,
 } from '../domain/movel.exceptions';
+import { MovelTipoMovelInvalidoException } from '../domain/movel-type.exceptions';
 import type { MovelRepositoryPort } from './ports/movel.repository.port';
 
 @Injectable()
@@ -110,6 +112,12 @@ export class MovelService {
   ): Promise<void> {
     if (!movel.tipoMovel || movel.tipoMovel === '') {
       throw new MovelCampoObrigatorioException('tipoMovel');
+    }
+
+    if (!isCommonMovelType(movel.tipoMovel)) {
+      throw new MovelTipoMovelInvalidoException(
+        `O tipo do móvel precisa conter um nome comum válido, como ${commonMovelTypeExamples()}.`,
+      );
     }
 
     if (

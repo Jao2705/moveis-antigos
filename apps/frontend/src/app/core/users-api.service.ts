@@ -16,4 +16,10 @@ export class UsersApiService {
       ativo,
     });
   }
+
+  setRole(id: number, role: AppUser['role']) {
+    return this.http.patch<AppUser>(`${environment.apiUrl}/users/${id}/role`, {
+      role,
+    });
+  }
 }

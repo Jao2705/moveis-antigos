@@ -45,3 +45,9 @@ export interface AppUser {
   created_at?: string;
   updated_at?: string;
 }
+
+export {
+  COMMON_MOVEL_TYPES,
+  commonMovelTypeExamples,
+  isCommonMovelType,
+} from './movel';
