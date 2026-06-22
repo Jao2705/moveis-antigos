@@ -8,7 +8,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 export class UiButtonComponent {
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() disabled = false;
-  @Input() variant: 'primary' | 'secondary' | 'ghost' = 'primary';
+  @Input() variant: 'primary' | 'secondary' | 'ghost' | 'destructive' = 'primary';
 
   @HostBinding('attr.type')
   get hostType(): string | null {
@@ -34,6 +34,8 @@ export class UiButtonComponent {
         'border-border bg-muted text-foreground hover:bg-card hover:shadow-[0_10px_30px_-20px_rgba(68,45,15,0.2)]',
       ghost:
         'border-border bg-surface/80 text-foreground hover:bg-muted hover:border-primary/30',
+      destructive:
+        'border-transparent bg-destructive text-destructive-foreground shadow-lg shadow-destructive/15 hover:bg-destructive/90',
     };
 
     return [base, variants[this.variant]];

@@ -70,7 +70,7 @@
             <div class="mt-6 flex flex-wrap gap-3">
               @if (canManage(item)) {
                 <a [routerLink]="['/atelie', atelie()!.id, 'moveis', 'editar', item.id]" ui-button variant="secondary">Editar</a>
-                <button type="button" ui-button variant="ghost" (click)="confirmDelete(item)">Excluir</button>
+                <button type="button" ui-button variant="destructive" (click)="confirmDelete(item)">Excluir</button>
               }
             </div>
           </article>
@@ -97,7 +97,7 @@
 
       <div class="mt-6 flex flex-wrap justify-end gap-3">
         <button type="button" ui-button variant="ghost" (click)="deleteTarget.set(null)">Cancelar</button>
-        <button type="button" ui-button (click)="deleteConfirmed()">Excluir agora</button>
+        <button type="button" ui-button variant="destructive" (click)="deleteConfirmed()">Excluir agora</button>
       </div>
     </div>
   </div>
