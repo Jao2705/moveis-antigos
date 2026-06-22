@@ -181,7 +181,7 @@ exports.AppService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 let AppService = class AppService {
     getHello() {
-        return 'Pindamonhangaba';
+        return 'Hello World!';
     }
 };
 exports.AppService = AppService;
