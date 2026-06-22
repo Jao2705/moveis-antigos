@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { UsersApiService } from '../../core/users-api.service';
 import { AppUser } from '../../core/models';
 import { extractApiError } from '../../core/api-error.util';
+import { AuthService } from '../../core/auth.service';
 import { UiButtonComponent } from '../../shared/ui/ui-button.component';
 import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
@@ -12,6 +13,7 @@ import { UiCardComponent } from '../../shared/ui/ui-card.component';
 })
 export class UsersListComponent implements OnInit {
   private readonly api = inject(UsersApiService);
+  readonly auth = inject(AuthService);
 
   readonly loading = signal(true);
   readonly items = signal<AppUser[]>([]);
@@ -19,6 +21,8 @@ export class UsersListComponent implements OnInit {
   readonly actionMessage = signal<string | null>(null);
   readonly actionError = signal<string | null>(null);
   readonly updatingId = signal<number | null>(null);
+  readonly updatingRoleId = signal<number | null>(null);
+  readonly roleTarget = signal<AppUser | null>(null);
 
   ngOnInit(): void {
     this.load();
@@ -52,6 +56,45 @@ export class UsersListComponent implements OnInit {
       error: (error) => {
         this.actionError.set(extractApiError(error).message);
         this.updatingId.set(null);
+      },
+    });
+  }
+
+  toggleRole(user: AppUser): void {
+    this.actionMessage.set(null);
+    this.actionError.set(null);
+    this.roleTarget.set(user);
+  }
+
+  cancelRoleChange(): void {
+    this.roleTarget.set(null);
+  }
+
+  confirmRoleChange(): void {
+    const user = this.roleTarget();
+    if (!user) {
+      return;
+    }
+
+    this.updatingRoleId.set(user.id);
+    const nextRole: AppUser['role'] = user.role === 'admin' ? 'user' : 'admin';
+
+    this.api.setRole(user.id, nextRole).subscribe({
+      next: (updated) => {
+        this.items.update((list) =>
+          list.map((item) => (item.id === updated.id ? updated : item)),
+        );
+        this.actionMessage.set(
+          updated.role === 'admin'
+            ? 'Usuário promovido a administrador com sucesso.'
+            : 'Usuário rebaixado para usuário com sucesso.',
+        );
+        this.updatingRoleId.set(null);
+        this.roleTarget.set(null);
+      },
+      error: (error) => {
+        this.actionError.set(extractApiError(error).message);
+        this.updatingRoleId.set(null);
       },
     });
   }

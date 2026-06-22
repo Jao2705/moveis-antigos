@@ -64,6 +64,22 @@ export class UsersService {
     return this.userRepo.update(user);
   }
 
+  async setRole(id: number, role: 'admin' | 'user'): Promise<User> {
+    const user = await this.findById(id);
+
+    if (user.role === 'admin' && role === 'user') {
+      const adminsCount = await this.userRepo.countAdmins();
+      if (adminsCount <= 1) {
+        throw new LastAdminException(
+          'Não é possível desativar a role de administrador do único administrador do sistema.',
+        );
+      }
+    }
+
+    user.role = role;
+    return this.userRepo.update(user);
+  }
+
   async updateProfile(
     id: number,
     nome: string,

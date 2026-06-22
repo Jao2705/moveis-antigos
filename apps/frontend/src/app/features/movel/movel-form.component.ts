@@ -1,11 +1,20 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { isCommonMovelType } from '@moveisantigos/utils';
 import { AtelieApiService } from '../../core/atelie-api.service';
 import { MovelApiService } from '../../core/movel-api.service';
 import { Atelie } from '../../core/models';
 import { AuthService } from '../../core/auth.service';
 import { extractApiError } from '../../core/api-error.util';
+import { collectFormFieldErrors, invalidFieldsMessage } from '../../shared/form-error.util';
 import { UiButtonComponent } from '../../shared/ui/ui-button.component';
 import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
@@ -31,8 +40,8 @@ export class MovelFormComponent implements OnInit {
   readonly atelie = signal<Atelie | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    tipoMovel: ['', Validators.required],
-    dataInicioTrab: ['', Validators.required],
+    tipoMovel: ['', [Validators.required, commonMovelTypeValidator()]],
+    dataInicioTrab: ['', [Validators.required, startDateAfterAtelieValidator(() => this.atelie())]],
     restaurado: [false],
     horasHomem: [40, [Validators.required, Validators.min(10)]],
   });
@@ -49,7 +58,10 @@ export class MovelFormComponent implements OnInit {
 
     this.atelieId = Number(atelieIdParam);
     this.atelieApi.getById(this.atelieId).subscribe({
-      next: (data) => this.atelie.set(data),
+      next: (data) => {
+        this.atelie.set(data);
+        this.form.controls.dataInicioTrab.updateValueAndValidity();
+      },
       error: () => void this.router.navigate(['/atelie']),
     });
 
@@ -79,6 +91,7 @@ export class MovelFormComponent implements OnInit {
           restaurado: item.restaurado,
           horasHomem: item.horasHomem,
         });
+        this.form.controls.dataInicioTrab.updateValueAndValidity();
         this.loadingData.set(false);
       },
       error: (error) => {
@@ -110,6 +123,10 @@ export class MovelFormComponent implements OnInit {
           : 'Este campo é obrigatório.';
     }
 
+    if (control.hasError('commonMovelType')) {
+      return 'Informe um tipo de móvel comum, como Sofá, Mesa de centro, Rack, Estante ou Cama.';
+    }
+
     if (control.hasError('min')) {
       return 'As horas-homem devem ter no mínimo 10 horas.';
     }
@@ -128,7 +145,8 @@ export class MovelFormComponent implements OnInit {
     }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMessage.set('Corrija os campos destacados para salvar o móvel.');
+      this.fieldErrors.set(collectFormFieldErrors(this.form, this.resolveFieldMessage.bind(this)));
+      this.errorMessage.set(invalidFieldsMessage());
       return;
     }
 
@@ -163,4 +181,71 @@ export class MovelFormComponent implements OnInit {
       complete: () => this.submitting.set(false),
     });
   }
+
+  private resolveFieldMessage(field: string): string | null {
+    const control = this.form.get(field);
+    if (!control || !control.invalid) {
+      return null;
+    }
+
+    if (control.hasError('required')) {
+      return field === 'tipoMovel'
+        ? 'O tipo do móvel é obrigatório.'
+        : field === 'dataInicioTrab'
+          ? 'A data de início é obrigatória.'
+          : 'Este campo é obrigatório.';
+    }
+
+    if (control.hasError('commonMovelType')) {
+      return 'Informe um tipo de móvel comum, como Sofá, Mesa de centro, Rack, Estante ou Cama.';
+    }
+
+    if (control.hasError('beforeAtelieFoundation')) {
+      return 'A data de início do trabalho não pode ser anterior à data de fundação do ateliê.';
+    }
+
+    if (control.hasError('min')) {
+      return 'As horas-homem devem ter no mínimo 10 horas.';
+    }
+
+    return 'Valor inválido.';
+  }
+}
+
+function commonMovelTypeValidator(): ValidatorFn {
+  return (control: AbstractControl<string>): ValidationErrors | null => {
+    const value = control.value?.trim();
+    if (!value) {
+      return null;
+    }
+
+    return isCommonMovelType(value) ? null : { commonMovelType: true };
+  };
+}
+
+function startDateAfterAtelieValidator(
+  atelieGetter: () => Atelie | null,
+): ValidatorFn {
+  return (control: AbstractControl<string>): ValidationErrors | null => {
+    const value = control.value?.trim();
+    if (!value) {
+      return null;
+    }
+
+    const atelie = atelieGetter();
+    if (!atelie?.dataFundacao) {
+      return null;
+    }
+
+    const startDate = new Date(value);
+    const foundationDate = new Date(atelie.dataFundacao);
+
+    if (Number.isNaN(startDate.getTime()) || Number.isNaN(foundationDate.getTime())) {
+      return null;
+    }
+
+    return startDate < foundationDate
+      ? { beforeAtelieFoundation: true }
+      : null;
+  };
 }

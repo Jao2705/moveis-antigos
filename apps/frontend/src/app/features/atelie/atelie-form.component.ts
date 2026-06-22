@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AtelieApiService } from '../../core/atelie-api.service';
 import { extractApiError } from '../../core/api-error.util';
+import { collectFormFieldErrors, invalidFieldsMessage } from '../../shared/form-error.util';
 import { UiButtonComponent } from '../../shared/ui/ui-button.component';
 import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
@@ -100,7 +101,8 @@ export class AtelieFormComponent implements OnInit {
     this.fieldErrors.set({});
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMessage.set('Corrija os campos destacados para registrar o ateliê.');
+      this.fieldErrors.set(collectFormFieldErrors(this.form, this.resolveFieldMessage.bind(this)));
+      this.errorMessage.set(invalidFieldsMessage());
       return;
     }
 
@@ -127,5 +129,30 @@ export class AtelieFormComponent implements OnInit {
       },
       complete: () => this.submitting.set(false),
     });
+  }
+
+  private resolveFieldMessage(field: string): string | null {
+    const control = this.form.get(field);
+    if (!control || !control.invalid) {
+      return null;
+    }
+
+    if (control.hasError('required')) {
+      return field === 'especialidadeEra'
+        ? 'A especialidade / era é obrigatória.'
+        : field === 'dataFundacao'
+          ? 'A data de fundação é obrigatória.'
+          : 'Este campo é obrigatório.';
+    }
+
+    if (control.hasError('min')) {
+      return 'A área da oficina deve ter no mínimo 50 m².';
+    }
+
+    if (control.hasError('maxlength')) {
+      return 'A especialidade / era deve ter no máximo 100 caracteres.';
+    }
+
+    return 'Valor inválido.';
   }
 }

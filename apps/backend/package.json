@@ -78,6 +78,10 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^@moveisantigos/utils$": "<rootDir>/../../../packages/utils/src/index.ts"
+    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

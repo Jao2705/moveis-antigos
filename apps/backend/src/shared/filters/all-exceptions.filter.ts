@@ -23,6 +23,7 @@ import {
   MovelNotFoundException,
   MovelRestauradoInconsistenteException,
 } from 'src/movel/domain/movel.exceptions';
+import { MovelTipoMovelInvalidoException } from 'src/movel/domain/movel-type.exceptions';
 import {
   UserNotFoundException,
   EmailAlreadyExistsException,
@@ -177,6 +178,14 @@ export class AppExceptionFilter implements ExceptionFilter {
       return this.buildResponse(HttpStatus.BAD_REQUEST, exception.message, {
         [field]: exception.message,
       });
+    }
+
+    if (exception instanceof MovelTipoMovelInvalidoException) {
+      return this.buildResponse(
+        HttpStatus.BAD_REQUEST,
+        exception.message,
+        { tipoMovel: exception.message },
+      );
     }
 
     if (exception instanceof MovelDataInicioInvalidaException) {

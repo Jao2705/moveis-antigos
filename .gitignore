@@ -75,3 +75,9 @@ apps/backend/node_modules/*
 .turbo/cache/ef5affdfa78dd1df-manifest.json
 .turbo/cache/ef5affdfa78dd1df-meta.json
 .turbo/cache/ef5affdfa78dd1df.tar.zst
+.turbo/cache/7724755b1c9e6bac-manifest.json
+.turbo/cache/7724755b1c9e6bac-meta.json
+.turbo/cache/7724755b1c9e6bac.tar.zst
+.turbo/cache/b908e85bbdc173ee-manifest.json
+.turbo/cache/b908e85bbdc173ee-meta.json
+.turbo/cache/b908e85bbdc173ee.tar.zst

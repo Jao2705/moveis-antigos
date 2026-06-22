@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Put,
@@ -13,6 +14,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from '../application/users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ActivateUserDto } from './dto/activate-user.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 import { JwtAuthGuard } from 'src/auth/infrastructure/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/infrastructure/guards/roles.guard';
 import { Roles } from 'src/auth/infrastructure/decorators/roles.decorator';
@@ -67,6 +69,26 @@ export class UsersController {
     @Body() dto: ActivateUserDto,
   ) {
     const user = await this.usersService.setActive(id, dto.ativo);
+    return this.toResponse(user);
+  }
+
+  @Patch('users/:id/role')
+  @Roles('admin')
+  @ApiOperation({
+    summary: 'Habilita ou desabilita a role de administrador (apenas administrador)',
+  })
+  async updateRole(
+    @Request() req: { user: { id: number } },
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateRoleDto,
+  ) {
+    if (req.user.id === id) {
+      throw new BadRequestException(
+        'Você não pode alterar sua própria role de administrador.',
+      );
+    }
+
+    const user = await this.usersService.setRole(id, dto.role);
     return this.toResponse(user);
   }
 
