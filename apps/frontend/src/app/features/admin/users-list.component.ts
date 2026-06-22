@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { UsersApiService } from '../../core/users-api.service';
 import { AppUser } from '../../core/models';
 import { extractApiError } from '../../core/api-error.util';
@@ -8,7 +9,7 @@ import { UiCardComponent } from '../../shared/ui/ui-card.component';
 
 @Component({
   selector: 'app-users-list',
-  imports: [UiButtonComponent, UiCardComponent],
+  imports: [NgClass, UiButtonComponent, UiCardComponent],
   templateUrl: './users-list.component.html',
 })
 export class UsersListComponent implements OnInit {

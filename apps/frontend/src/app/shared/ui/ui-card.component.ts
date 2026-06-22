@@ -16,11 +16,11 @@ export class UiCardComponent {
 
   get classes(): string[] {
     const base =
-      'rounded-3xl border p-6 shadow-[0_20px_60px_-30px_rgba(68,45,15,0.35)] transition duration-200';
+      'rounded-3xl border p-6 shadow-[0_20px_60px_-30px_rgba(68,45,15,0.18)] transition duration-200';
     const tones: Record<typeof this.tone, string> = {
-      default: 'border-amber-200 bg-white text-stone-900',
-      glass: 'border-white/30 bg-white/70 text-stone-900 backdrop-blur-xl',
-      muted: 'border-stone-200 bg-stone-50 text-stone-900',
+      default: 'border-border bg-card text-card-foreground',
+      glass: 'border-border/30 bg-white/55 text-card-foreground backdrop-blur-xl',
+      muted: 'border-border bg-muted text-card-foreground',
     };
 
     return [base, tones[this.tone]];

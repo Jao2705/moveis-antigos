@@ -27,13 +27,13 @@ export class UiButtonComponent {
 
   get classes(): string[] {
     const base =
-      'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60';
+      'inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60';
     const variants: Record<typeof this.variant, string> = {
-      primary: 'bg-amber-700 text-white shadow-lg shadow-amber-900/20 hover:bg-amber-800',
+      primary: 'border-transparent bg-primary text-primary-foreground shadow-lg shadow-primary/15 hover:bg-primary-hover',
       secondary:
-        'bg-stone-900 text-stone-50 shadow-lg shadow-stone-950/10 hover:bg-stone-800',
+        'border-border bg-muted text-foreground hover:bg-card hover:shadow-[0_10px_30px_-20px_rgba(68,45,15,0.2)]',
       ghost:
-        'border border-amber-200 bg-white/80 text-amber-900 hover:border-amber-300 hover:bg-amber-50',
+        'border-border bg-surface/80 text-foreground hover:bg-muted hover:border-primary/30',
     };
 
     return [base, variants[this.variant]];
